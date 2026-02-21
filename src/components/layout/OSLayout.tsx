@@ -104,9 +104,9 @@ function OSLayoutInner({ children }: OSLayoutProps) {
         className={cn(
           "min-h-screen transition-all duration-500",
           // Top padding for fixed header (reduced in focus mode)
-          isFocusMode ? "pt-4" : "pt-24", // Padding for consolidated single-layer header
+          isFocusMode ? "pt-4" : "pt-20 lg:pt-24", // Reduced for mobile
           // Bottom padding for mobile dock
-          isFocusMode ? "pb-4" : "pb-20 lg:pb-0",
+          isFocusMode ? "pb-4" : "pb-24 lg:pb-0", // Increased for mobile to avoid dock overlap
           // Side padding for Right Panel
           isOSShellContext && !isFocusMode && "xl:pr-80",
           // Center content more in focus mode

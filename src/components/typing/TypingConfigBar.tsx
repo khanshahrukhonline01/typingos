@@ -86,28 +86,28 @@ export function TypingConfigBar() {
                             <Zap className="w-3 h-3 text-yellow-500" />
                             <div className="flex flex-col -space-y-0.5 sm:-space-y-1">
                                 <span className="text-[9px] sm:text-[10px] font-black tabular-nums leading-none">{bestWpm || 0}</span>
-                                <span className="hidden sm:inline text-[7px] font-bold uppercase tracking-tighter text-muted-foreground/40 leading-none">{t('Best')}</span>
+                                <span className="hidden lg:inline text-[7px] font-bold uppercase tracking-tighter text-muted-foreground/40 leading-none">{t('Best')}</span>
                             </div>
                         </div>
                         <div className="flex items-center gap-1.5 group/stat" title={t('Average Accuracy')}>
                             <Target className="w-3 h-3 text-emerald-500" />
                             <div className="flex flex-col -space-y-0.5 sm:-space-y-1">
                                 <span className="text-[9px] sm:text-[10px] font-black tabular-nums leading-none">{avgAccuracy?.toFixed(0) || 0}%</span>
-                                <span className="hidden sm:inline text-[7px] font-bold uppercase tracking-tighter text-muted-foreground/40 leading-none">{t('Avg')}</span>
+                                <span className="hidden lg:inline text-[7px] font-bold uppercase tracking-tighter text-muted-foreground/40 leading-none">{t('Avg')}</span>
                             </div>
                         </div>
                         <div className="flex items-center gap-1.5 group/stat" title={t('Tests Today')}>
                             <TrendingUp className="w-3 h-3 text-blue-500" />
                             <div className="flex flex-col -space-y-0.5 sm:-space-y-1">
                                 <span className="text-[9px] sm:text-[10px] font-black tabular-nums leading-none">{userStats.totalTests}</span>
-                                <span className="hidden sm:inline text-[7px] font-bold uppercase tracking-tighter text-muted-foreground/40 leading-none">{t('Today')}</span>
+                                <span className="hidden lg:inline text-[7px] font-bold uppercase tracking-tighter text-muted-foreground/40 leading-none">{t('Today')}</span>
                             </div>
                         </div>
                         <div className="flex items-center gap-1.5 group/stat" title={t('Current Level')}>
                             <Award className="w-3 h-3 text-purple-500" />
                             <div className="flex flex-col -space-y-0.5 sm:-space-y-1">
                                 <span className="text-[9px] sm:text-[10px] font-black tabular-nums leading-none">{userStats.level}</span>
-                                <span className="hidden sm:inline text-[7px] font-bold uppercase tracking-tighter text-muted-foreground/40 leading-none">{t('LVL')}</span>
+                                <span className="hidden lg:inline text-[7px] font-bold uppercase tracking-tighter text-muted-foreground/40 leading-none">{t('LVL')}</span>
                             </div>
                         </div>
                     </div>
@@ -128,7 +128,7 @@ export function TypingConfigBar() {
                                 {contentMode === 'zen' && <Globe className="w-3.5 h-3.5" />}
                                 {contentMode === 'characters' && <Clock className="w-3.5 h-3.5" />}
                                 {contentMode === 'custom' && <User className="w-3.5 h-3.5" />}
-                                <span className="ml-1 capitalize">{t(contentMode === 'words' ? 'Words' : contentMode === 'sentences' ? 'Sentences' : contentMode === 'paragraphs' ? 'Paragraphs' : contentMode === 'numbers' ? 'Numbers' : contentMode === 'quote' ? 'Quotes' : contentMode === 'code' ? 'Code Snippets' : contentMode === 'zen' ? 'Zen Mode' : contentMode === 'characters' ? 'Characters' : 'Custom Text')}</span>
+                                <span className="ml-1 capitalize hidden sm:inline">{t(contentMode === 'words' ? 'Words' : contentMode === 'sentences' ? 'Sentences' : contentMode === 'paragraphs' ? 'Paragraphs' : contentMode === 'numbers' ? 'Numbers' : contentMode === 'quote' ? 'Quotes' : contentMode === 'code' ? 'Code Snippets' : contentMode === 'zen' ? 'Zen Mode' : contentMode === 'characters' ? 'Characters' : 'Custom Text')}</span>
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start" className="w-48">
@@ -270,7 +270,7 @@ export function TypingConfigBar() {
                         <DropdownMenuTrigger asChild>
                             <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-white/5 text-muted-foreground hover:text-primary transition-all text-xs font-bold uppercase tracking-wider">
                                 <Globe className="w-3.5 h-3.5" />
-                                {languageNames[language as Language] || language}
+                                <span className="hidden sm:inline">{languageNames[language as Language] || language}</span>
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="center" className="max-h-[300px] overflow-y-auto">

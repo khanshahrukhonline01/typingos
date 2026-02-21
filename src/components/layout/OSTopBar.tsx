@@ -130,7 +130,7 @@ export function OSTopBar() {
               {!isTyping && (
                 <Button
                   variant="ghost"
-                  className="flex items-center gap-3 border-l border-white/5 pl-4 group/level cursor-pointer h-auto py-1.5 px-3 rounded-xl hover:bg-white/5"
+                  className="hidden sm:flex items-center gap-3 border-l border-white/5 pl-4 group/level cursor-pointer h-auto py-1.5 px-3 rounded-xl hover:bg-white/5"
                   onClick={() => navigate("/profile")}
                 >
                   <div className="relative flex-shrink-0">
@@ -190,16 +190,16 @@ export function OSTopBar() {
                       <Zap className="w-3.5 h-3.5 fill-current" />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[9px] font-black text-muted-foreground uppercase leading-none tracking-widest">WPM</span>
+                      <span className="text-[9px] font-black text-muted-foreground uppercase leading-none tracking-widest hidden sm:inline">WPM</span>
                       <span className="text-sm font-black text-white">{currentWPM}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 border-l border-white/5 pl-6 group/stat">
+                  <div className="flex items-center gap-2 border-l border-white/5 pl-2 sm:pl-6 group/stat">
                     <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-500 group-hover/stat:scale-110 transition-transform">
                       <Target className="w-3.5 h-3.5" />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[9px] font-black text-muted-foreground uppercase leading-none tracking-widest">ACC</span>
+                      <span className="text-[9px] font-black text-muted-foreground uppercase leading-none tracking-widest hidden sm:inline">ACC</span>
                       <span className="text-sm font-black text-white">{currentAccuracy}%</span>
                     </div>
                   </div>

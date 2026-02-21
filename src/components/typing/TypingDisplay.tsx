@@ -52,7 +52,7 @@ export const TypingDisplay: React.FC<TypingDisplayProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`relative text-[12pt] leading-snug tracking-tight select-none max-h-[240px] overflow-y-auto scroll-smooth pr-2 ${isHindi ? "font-hindi" : "font-sans font-medium"
+      className={`relative text-[14pt] lg:text-[12pt] leading-snug tracking-tight select-none max-h-[240px] overflow-y-auto scroll-smooth pr-2 ${isHindi ? "font-hindi" : "font-sans font-medium"
         }`}
       role="region"
       aria-label="Typing text area"

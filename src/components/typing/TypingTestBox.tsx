@@ -627,7 +627,7 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
         )}
 
         {/* OVERTAKE NOTIFICATIONS */}
-        <div className="absolute top-[200px] right-8 flex flex-col gap-2 z-50 pointer-events-none">
+        <div className="absolute top-[200px] right-2 sm:right-8 flex flex-col gap-2 z-50 pointer-events-none">
           <AnimatePresence>
             {overtakeQueue.map((name, i) => (
               <motion.div
@@ -646,7 +646,7 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
 
       {/* MAIN TYPING LAYOUT */}
       <div className={cn(
-        "relative min-h-[350px] w-full flex flex-col items-center justify-center p-6 lg:p-8 transition-all duration-700",
+        "relative min-h-[300px] lg:min-h-[350px] w-full flex flex-col items-center justify-center p-4 lg:p-8 transition-all duration-700",
         isStarted && !isFinished && stats.wpm > (topWpm || 40) ? "bg-primary/5" : ""
       )}>
         <div className="w-full flex flex-col items-center gap-4">
@@ -688,7 +688,7 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
           </div>
 
           {showKeyboard && (
-            <div className="w-full animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <div className="hidden md:block w-full animate-in fade-in slide-in-from-bottom-8 duration-700">
               <VirtualKeyboard
                 currentChar={text[currentIndex]}
                 pressedKey={lastPressedKey || undefined}
@@ -699,33 +699,35 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
             </div>
           )}
         </div>
-      </div>
+      </div >
 
       {/* FINAL ACTIONS */}
-      <div className="flex items-center justify-center gap-4 py-4 bg-secondary/20 border-t border-black/[0.03] dark:border-white/5">
+      < div className="flex items-center justify-center gap-4 py-4 bg-secondary/20 border-t border-black/[0.03] dark:border-white/5" >
         <Button onClick={handleRestart} className="h-12 px-8 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 rounded-xl font-bold gap-2 shadow-lg transition-all active:scale-95" aria-label="Start new test">
           <RefreshCw className="w-4 h-4" aria-hidden="true" /> {t('New Test')}
         </Button>
         <Button onClick={handleRestart} variant="outline" className="h-12 px-8 bg-white dark:bg-[#25282C] border-black/10 dark:border-white/10 text-foreground rounded-xl font-bold gap-2 shadow-sm hover:bg-secondary transition-all active:scale-95" aria-label="Restart current test">
           <RotateCcw className="w-4 h-4" aria-hidden="true" /> {t('Restart Test')}
         </Button>
-      </div>
+      </div >
 
       <div className="pb-8 text-center">
         <p className="text-xs text-muted-foreground font-medium">{t('Press')} <Badge variant="secondary" className="mx-1 h-5 px-1.5 rounded uppercase font-bold text-[10px]">Tab</Badge> {t('to restart')}</p>
       </div>
 
-      {isFinished && (
-        <ResultsModal
-          stats={stats}
-          onRestart={handleRestart}
-          examConfig={examConfig}
-          passed={passed}
-          language={selectedLanguage}
-          keystrokes={keystrokes}
-          text={text}
-        />
-      )}
-    </div>
+      {
+        isFinished && (
+          <ResultsModal
+            stats={stats}
+            onRestart={handleRestart}
+            examConfig={examConfig}
+            passed={passed}
+            language={selectedLanguage}
+            keystrokes={keystrokes}
+            text={text}
+          />
+        )
+      }
+    </div >
   );
 };
