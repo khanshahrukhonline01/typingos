@@ -18,7 +18,7 @@
       }
     }(window.location));
     // Redirect: encode the path into a query string for index.html to decode
-    var segmentCount = 0;
+    var segmentCount = window.location.hostname.includes('github.io') ? 1 : 0;
     var l = window.location;
     l.replace(
       l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?/' +
