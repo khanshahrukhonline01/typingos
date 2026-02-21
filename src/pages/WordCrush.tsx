@@ -58,6 +58,48 @@ const DIFFICULTY_LEVELS = [
   { name: "Insane", minSpeed: 1.8, maxSpeed: 2.5, spawnRate: 900, color: "bg-purple-500" },
 ];
 
+/** Renders a falling word with position set imperatively to avoid JSX style= prop */
+const FallingWordItem: React.FC<{ word: FallingWord; input: string }> = ({ word, input }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.style.left = `${word.x}%`;
+      ref.current.style.top = `${word.y}%`;
+    }
+  });
+  return (
+    <div
+      ref={ref}
+      className={`absolute font-mono text-lg md:text-xl font-bold transition-all -translate-x-1/2 ${word.color} ${input && word.word.toLowerCase().startsWith(input) ? "scale-110 ring-2 ring-primary rounded px-2" : ""
+        }`}
+    >
+      {word.word.split("").map((char, i) => (
+        <span key={i} className={input && word.word.toLowerCase()[i] === input[i] ? "text-green-400" : ""}>
+          {char}
+        </span>
+      ))}
+    </div>
+  );
+};
+
+/** Renders a floating score with position set imperatively to avoid JSX style= prop */
+const FloatingScoreItem: React.FC<{ fs: { id: number; x: number; y: number; score: number } }> = ({ fs }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.style.left = `${fs.x}%`;
+      ref.current.style.top = `${fs.y}%`;
+      ref.current.style.transform = "translateX(-50%)";
+    }
+  });
+  return (
+    <div ref={ref} className="absolute text-green-400 font-bold text-xl animate-float-up pointer-events-none">
+      +{fs.score}
+    </div>
+  );
+};
+
+
 export default function WordCrush() {
   const [gameState, setGameState] = useState<"idle" | "playing" | "paused" | "gameOver">("idle");
   const [words, setWords] = useState<FallingWord[]>([]);
@@ -372,40 +414,12 @@ export default function WordCrush() {
 
           {/* Falling words */}
           {words.map(word => (
-            <div
-              key={word.id}
-              className={`absolute font-mono text-lg md:text-xl font-bold transition-all ${word.color} ${input && word.word.toLowerCase().startsWith(input) ? "scale-110 ring-2 ring-primary rounded px-2" : ""
-                }`}
-              style={{
-                left: `${word.x}%`,
-                top: `${word.y}%`,
-                transform: "translateX(-50%)",
-              }}
-            >
-              {word.word.split("").map((char, i) => (
-                <span
-                  key={i}
-                  className={input && word.word.toLowerCase()[i] === input[i] ? "text-green-400" : ""}
-                >
-                  {char}
-                </span>
-              ))}
-            </div>
+            <FallingWordItem key={word.id} word={word} input={input} />
           ))}
 
           {/* Floating scores */}
           {floatingScores.map(fs => (
-            <div
-              key={fs.id}
-              className="absolute text-green-400 font-bold text-xl animate-float-up pointer-events-none"
-              style={{
-                left: `${fs.x}%`,
-                top: `${fs.y}%`,
-                transform: "translateX(-50%)",
-              }}
-            >
-              +{fs.score}
-            </div>
+            <FloatingScoreItem key={fs.id} fs={fs} />
           ))}
 
           {/* Paused Overlay */}

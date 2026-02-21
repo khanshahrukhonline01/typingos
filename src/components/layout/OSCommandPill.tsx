@@ -175,6 +175,8 @@ export function OSCommandPill() {
                                 toggleVoice();
                             }}
                             role="button"
+                            title={t("Voice Search")}
+                            aria-label={t("Activate Voice Search")}
                             className={cn(
                                 "p-1.5 rounded-lg hover:bg-primary/20 transition-all cursor-pointer",
                                 isListening && "animate-pulse text-primary bg-primary/20"

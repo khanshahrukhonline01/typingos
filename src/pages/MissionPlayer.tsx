@@ -21,6 +21,7 @@ export default function MissionPlayer() {
     const [wpm, setWpm] = useState(0);
     const [accuracy, setAccuracy] = useState(100);
     const [isFinished, setIsFinished] = useState(false);
+    const progressRef = React.useRef<HTMLDivElement>(null);
 
     // Mock mission fallback if not in context (since we can't edit MOCK_MISSIONS in place easily)
     const MOCK_MISSIONS = [
@@ -64,6 +65,14 @@ export default function MissionPlayer() {
         toast.success("Mission Complete!", { description: "+10 Coins earned." });
     };
 
+    // Update progress bar imperatively to avoid JSX style= prop
+    React.useEffect(() => {
+        if (progressRef.current && mission) {
+            const pct = (typed.length / (mission.content?.length || 1)) * 100;
+            progressRef.current.style.width = `${pct}%`;
+        }
+    }, [typed, mission]);
+
     if (!mission) return <div className="p-12 text-center">Loading...</div>;
 
     return (
@@ -84,8 +93,8 @@ export default function MissionPlayer() {
                     <Card className="p-8 space-y-6 relative overflow-hidden bg-black/40 border-white/10 backdrop-blur-xl">
                         <div className="absolute top-0 left-0 w-full h-1 bg-white/10">
                             <div
+                                ref={progressRef}
                                 className="h-full bg-primary transition-all duration-300"
-                                style={{ width: `${(typed.length / mission.content.length) * 100}%` }}
                             />
                         </div>
 
@@ -108,6 +117,8 @@ export default function MissionPlayer() {
                                     value={typed}
                                     onChange={handleInput}
                                     spellCheck={false}
+                                    title="Mission Typing Area"
+                                    aria-label="Type the mission content here"
                                 />
                             </div>
 

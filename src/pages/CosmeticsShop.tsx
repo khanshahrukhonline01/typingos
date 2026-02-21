@@ -26,13 +26,11 @@ export default function CosmeticsShop() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { userStats, equipCosmetic } = useGamification();
-    const { wallet } = useEconomy();
+    const { wallet, inventory: ownedIds, purchaseItem } = useEconomy();
 
-    // Filter cosmetic items based on owned IDs
-    const inventory = COSMETIC_ITEMS.filter(item => userStats.ownedItems.includes(item.id));
+    // Filter cosmetic items based on owned IDs from EconomyContext
+    const inventory = COSMETIC_ITEMS.filter(item => ownedIds.includes(item.id));
 
-    // Derived from userStats
-    const cratesAvailable = userStats.cratesAvailable;
     const equipped = userStats.equippedCosmetics || {};
 
     const [showGacha, setShowGacha] = useState(false);
@@ -46,7 +44,12 @@ export default function CosmeticsShop() {
 
 
     const getItemsByType = (type: CosmeticType) => {
-        return inventory.filter(item => item.type === type);
+        return COSMETIC_ITEMS.filter(item => item.type === type);
+    };
+
+    const handlePurchaseDirect = (item: Cosmetic) => {
+        const itemWithOwned = { ...item, owned: true };
+        purchaseItem(itemWithOwned as any);
     };
 
     const isEquipped = (itemId: string) => {
@@ -81,10 +84,10 @@ export default function CosmeticsShop() {
                     {/* Open Crate Button */}
                     <Button
                         onClick={() => setShowGacha(true)}
-                        className="gap-2 bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90"
+                        className="gap-2 bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90 shadow-lg shadow-primary/20"
                     >
                         <Gift className="w-4 h-4" />
-                        {t("Open Crate")} ({cratesAvailable})
+                        {t("Try Your Luck!")}
                     </Button>
                 </div>
 
@@ -93,10 +96,6 @@ export default function CosmeticsShop() {
                     <Card className="p-4 bg-secondary/20 border-white/5">
                         <div className="text-xs text-muted-foreground uppercase font-bold mb-1">{t("Collection")}</div>
                         <div className="text-2xl font-black text-foreground">{inventory.length}/30</div>
-                    </Card>
-                    <Card className="p-4 bg-secondary/20 border-white/5">
-                        <div className="text-xs text-muted-foreground uppercase font-bold mb-1">{t("Crates")}</div>
-                        <div className="text-2xl font-black text-primary">{cratesAvailable}</div>
                     </Card>
                     <Card className="p-4 bg-secondary/20 border-white/5">
                         <div className="text-xs text-muted-foreground uppercase font-bold mb-1 flex items-center gap-1">
@@ -156,15 +155,21 @@ export default function CosmeticsShop() {
                                                     )}
                                                     onClick={() => setPreviewItem(item)}
                                                 >
-                                                    {/* Equipped Badge */}
-                                                    {isEquipped(item.id) && (
-                                                        <div className="absolute top-2 right-2 z-10">
+                                                    {/* Status Badge */}
+                                                    <div className="absolute top-2 right-2 z-10 flex flex-col gap-1 items-end">
+                                                        {isEquipped(item.id) && (
                                                             <Badge className="bg-primary text-white text-[10px]">
                                                                 <Check className="w-3 h-3 mr-1" />
                                                                 {t("Equipped")}
                                                             </Badge>
-                                                        </div>
-                                                    )}
+                                                        )}
+                                                        {!ownedIds.includes(item.id) && (
+                                                            <Badge variant="secondary" className="text-[10px] bg-black/40 backdrop-blur-sm">
+                                                                <Lock className="w-3 h-3 mr-1" />
+                                                                {t("Locked")}
+                                                            </Badge>
+                                                        )}
+                                                    </div>
 
                                                     <CardContent className="p-4 text-center">
                                                         {/* Icon */}
@@ -195,20 +200,6 @@ export default function CosmeticsShop() {
                                             </motion.div>
                                         ))}
 
-                                        {/* Empty State */}
-                                        {getItemsByType(type).length === 0 && (
-                                            <div className="col-span-full py-12 text-center text-muted-foreground">
-                                                <Lock className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                                                <p>{t("No {{type}} unlocked yet", { type })}</p>
-                                                <Button
-                                                    variant="outline"
-                                                    className="mt-4"
-                                                    onClick={() => setShowGacha(true)}
-                                                >
-                                                    {t("Open Crates to Unlock")}
-                                                </Button>
-                                            </div>
-                                        )}
                                     </div>
                                 </TabsContent>
                             ))}
@@ -255,21 +246,30 @@ export default function CosmeticsShop() {
                                             {previewItem.description}
                                         </p>
 
-                                        {/* Equip Button */}
-                                        <Button
-                                            className="w-full"
-                                            disabled={isEquipped(previewItem.id)}
-                                            onClick={() => handleEquip(previewItem)}
-                                        >
-                                            {isEquipped(previewItem.id) ? (
-                                                <>
-                                                    <Check className="w-4 h-4 mr-2" />
-                                                    {t("Equipped")}
-                                                </>
-                                            ) : (
-                                                t("Equip")
-                                            )}
-                                        </Button>
+                                        {/* Purchase / Equip Button */}
+                                        {ownedIds.includes(previewItem.id) ? (
+                                            <Button
+                                                className="w-full"
+                                                disabled={isEquipped(previewItem.id)}
+                                                onClick={() => handleEquip(previewItem)}
+                                            >
+                                                {isEquipped(previewItem.id) ? (
+                                                    <>
+                                                        <Check className="w-4 h-4 mr-2" />
+                                                        {t("Equipped")}
+                                                    </>
+                                                ) : (
+                                                    t("Equip")
+                                                )}
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                className="w-full bg-emerald-600 hover:bg-emerald-700 font-bold"
+                                                onClick={() => handlePurchaseDirect(previewItem)}
+                                            >
+                                                {t("Unlock for")} {previewItem.price} {previewItem.currency === 'coins' ? 'Coins' : 'Gems'}
+                                            </Button>
+                                        )}
                                     </div>
                                 ) : (
                                     <div className="py-12 text-center text-muted-foreground">

@@ -462,11 +462,15 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
         isFocusMode && "border-primary/20 shadow-primary/10"
       )}>
         {/* ACCURACY EMBERS GLOW */}
-        <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-1000 z-0 accuracy-embers-glow"
+        <motion.div
+          className="absolute inset-0 pointer-events-none z-0 accuracy-embers-glow"
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: accuracyLevel > 0 ? 1 : 0,
+            transition: { duration: 1 }
+          }}
           style={{
-            '--accuracy-level': `${accuracyLevel}px`,
-            opacity: accuracyLevel > 0 ? 1 : 0
+            '--accuracy-level': `${accuracyLevel}px`
           } as React.CSSProperties}
         />
 
@@ -474,14 +478,24 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
         {showSparks && (
           <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden">
             {[...Array(20)].map((_, i) => (
-              <div
+              <motion.div
                 key={i}
-                className="absolute w-1 h-1 bg-primary rounded-full animate-ping speed-spark"
-                style={{
-                  '--spark-top': `${Math.random() * 100}%`,
-                  '--spark-left': `${Math.random() * 100}%`,
-                  '--spark-delay': `${Math.random() * 2}s`,
-                } as React.CSSProperties}
+                className="absolute w-1 h-1 bg-primary rounded-full"
+                initial={{
+                  top: `${Math.random() * 100}%`,
+                  left: `${Math.random() * 100}%`,
+                  opacity: 0,
+                  scale: 0.5
+                }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  scale: [0.5, 1.5, 0.5]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 2
+                }}
               />
             ))}
           </div>

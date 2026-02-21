@@ -264,6 +264,8 @@ export const TypeDungeon: React.FC = () => {
                             value={inputValue}
                             onChange={handleInputChange}
                             autoFocus
+                            title="Attack Input"
+                            aria-label="Type the word to attack"
                             className="bg-transparent border-b-2 border-white/20 text-center text-3xl focus:outline-none focus:border-red-500 w-64 text-transparent caret-white"
                         // Make text transparent so custom rendering above shows
                         />

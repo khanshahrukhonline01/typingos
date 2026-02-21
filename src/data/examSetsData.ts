@@ -8,6 +8,808 @@ export interface ExamSet {
 }
 
 export const sscExamSets: ExamSet[] = [
+    // --- GENERATED EXAM SETS (100+) ---
+    {
+        id: "ssc-chsl-gen-en-200",
+        examId: "ssc-chsl",
+        title: "SSC CHSL Set 1 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Economic development and its impact on poverty reduction in developing nations."
+    },
+    {
+        id: "ssc-chsl-gen-hi-201",
+        examId: "ssc-chsl",
+        title: "SSC CHSL सेट 1 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "विकासशील देशों में गरीबी कम करने पर आर्थिक विकास और उसका प्रभाव।"
+    },
+    {
+        id: "ssc-chsl-gen-en-202",
+        examId: "ssc-chsl",
+        title: "SSC CHSL Set 2 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "The importance of renewable energy sources in combating climate change."
+    },
+    {
+        id: "ssc-chsl-gen-hi-203",
+        examId: "ssc-chsl",
+        title: "SSC CHSL सेट 2 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "जलवायु परिवर्तन से निपटने में नवीकरणीय ऊर्जा स्रोतों का महत्व।"
+    },
+    {
+        id: "ssc-chsl-gen-en-204",
+        examId: "ssc-chsl",
+        title: "SSC CHSL Set 3 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Digital transformation of government services for better citizen engagement."
+    },
+    {
+        id: "ssc-chsl-gen-hi-205",
+        examId: "ssc-chsl",
+        title: "SSC CHSL सेट 3 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "बेहतर नागरिक जुड़ाव के लिए सरकारी सेवाओं का डिजिटल रूपांतरण।"
+    },
+    {
+        id: "ssc-chsl-gen-en-206",
+        examId: "ssc-chsl",
+        title: "SSC CHSL Set 4 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Role of education in empowering women and achieving social equality."
+    },
+    {
+        id: "ssc-chsl-gen-hi-207",
+        examId: "ssc-chsl",
+        title: "SSC CHSL सेट 4 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "महिलाओं को सशक्त बनाने और सामाजिक समानता प्राप्त करने में शिक्षा की भूमिका।"
+    },
+    {
+        id: "ssc-chsl-gen-en-208",
+        examId: "ssc-chsl",
+        title: "SSC CHSL Set 5 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "Challenges of urbanization and sustainable city planning in the 21st century."
+    },
+    {
+        id: "ssc-chsl-gen-hi-209",
+        examId: "ssc-chsl",
+        title: "SSC CHSL सेट 5 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "21वीं सदी में शहरीकरण और टिकाऊ शहर नियोजन की चुनौतियां।"
+    },
+    {
+        id: "ssc-chsl-gen-en-210",
+        examId: "ssc-chsl",
+        title: "SSC CHSL Set 6 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Impact of social media on modern communication and public opinion."
+    },
+    {
+        id: "ssc-chsl-gen-hi-211",
+        examId: "ssc-chsl",
+        title: "SSC CHSL सेट 6 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "आधुनिक संचार और जनमत पर सोशल मीडिया का प्रभाव।"
+    },
+    {
+        id: "ssc-chsl-gen-en-212",
+        examId: "ssc-chsl",
+        title: "SSC CHSL Set 7 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Healthcare infrastructure and its critical role in pandemic preparedness."
+    },
+    {
+        id: "ssc-chsl-gen-hi-213",
+        examId: "ssc-chsl",
+        title: "SSC CHSL सेट 7 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "स्वास्थ्य देखभाल बुनियादी ढांचा और महामारी की तैयारी में इसकी महत्वपूर्ण भूमिका।"
+    },
+    {
+        id: "ssc-chsl-gen-en-214",
+        examId: "ssc-chsl",
+        title: "SSC CHSL Set 8 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "The evolution of the Indian constitution and its democratic values."
+    },
+    {
+        id: "ssc-chsl-gen-hi-215",
+        examId: "ssc-chsl",
+        title: "SSC CHSL सेट 8 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "भारतीय संविधान का विकास और उसके लोकतांत्रिक मूल्य।"
+    },
+    {
+        id: "ssc-chsl-gen-en-216",
+        examId: "ssc-chsl",
+        title: "SSC CHSL Set 9 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Space exploration and its contribution to scientific advancements."
+    },
+    {
+        id: "ssc-chsl-gen-hi-217",
+        examId: "ssc-chsl",
+        title: "SSC CHSL सेट 9 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "अंतरिक्ष अन्वेषण और वैज्ञानिक प्रगति में इसका योगदान।"
+    },
+    {
+        id: "ssc-chsl-gen-en-218",
+        examId: "ssc-chsl",
+        title: "SSC CHSL Set 10 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Sustainable agriculture practices to ensure food security for all."
+    },
+    {
+        id: "ssc-chsl-gen-hi-219",
+        examId: "ssc-chsl",
+        title: "SSC CHSL सेट 10 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "सभी के लिए खाद्य सुरक्षा सुनिश्चित करने के लिए टिकाऊ कृषि पद्धतियां।"
+    },
+    {
+        id: "ssc-cgl-gen-en-220",
+        examId: "ssc-cgl",
+        title: "SSC CGL Set 1 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Fiscal policy and its role in managing economic stability and growth."
+    },
+    {
+        id: "ssc-cgl-gen-hi-221",
+        examId: "ssc-cgl",
+        title: "SSC CGL सेट 1 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "आर्थिक स्थिरता और विकास के प्रबंधन में राजकोषीय नीति और इसकी भूमिका।"
+    },
+    {
+        id: "ssc-cgl-gen-en-222",
+        examId: "ssc-cgl",
+        title: "SSC CGL Set 2 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "The complexity of international trade relations and global supply chains."
+    },
+    {
+        id: "ssc-cgl-gen-hi-223",
+        examId: "ssc-cgl",
+        title: "SSC CGL सेट 2 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "अंतर्राष्ट्रीय व्यापार संबंधों और वैश्विक आपूर्ति श्रृंखलाओं की जटिलता।"
+    },
+    {
+        id: "ssc-cgl-gen-en-224",
+        examId: "ssc-cgl",
+        title: "SSC CGL Set 3 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Administrative reforms in civil services for efficient governance."
+    },
+    {
+        id: "ssc-cgl-gen-hi-225",
+        examId: "ssc-cgl",
+        title: "SSC CGL सेट 3 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "कुशल शासन के लिए नागरिक सेवाओं में प्रशासनिक सुधार।"
+    },
+    {
+        id: "ssc-cgl-gen-en-226",
+        examId: "ssc-cgl",
+        title: "SSC CGL Set 4 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Legal frameworks for environmental protection and biodiversity conservation."
+    },
+    {
+        id: "ssc-cgl-gen-hi-227",
+        examId: "ssc-cgl",
+        title: "SSC CGL सेट 4 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "पर्यावरण संरक्षण और जैव विविधता संरक्षण के लिए कानूनी रूपरेखा।"
+    },
+    {
+        id: "ssc-cgl-gen-en-228",
+        examId: "ssc-cgl",
+        title: "SSC CGL Set 5 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "The impact of globalization on local cultures and national identities."
+    },
+    {
+        id: "ssc-cgl-gen-hi-229",
+        examId: "ssc-cgl",
+        title: "SSC CGL सेट 5 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "स्थानीय संस्कृतियों और राष्ट्रीय पहचान पर वैश्वीकरण का प्रभाव।"
+    },
+    {
+        id: "ssc-cgl-gen-en-230",
+        examId: "ssc-cgl",
+        title: "SSC CGL Set 6 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Tax administration and the implementation of Goods and Services Tax."
+    },
+    {
+        id: "ssc-cgl-gen-hi-231",
+        examId: "ssc-cgl",
+        title: "SSC CGL सेट 6 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "कर प्रशासन और वस्तु एवं सेवा कर का कार्यान्वयन।"
+    },
+    {
+        id: "ssc-cgl-gen-en-232",
+        examId: "ssc-cgl",
+        title: "SSC CGL Set 7 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "National security challenges in the era of cyber warfare and digital threats."
+    },
+    {
+        id: "ssc-cgl-gen-hi-233",
+        examId: "ssc-cgl",
+        title: "SSC CGL सेट 7 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "साइबर युद्ध और डिजिटल खतरों के युग में राष्ट्रीय सुरक्षा चुनौतियां।"
+    },
+    {
+        id: "ssc-cgl-gen-en-234",
+        examId: "ssc-cgl",
+        title: "SSC CGL Set 8 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "The role of the judiciary in upholding the rule of law and human rights."
+    },
+    {
+        id: "ssc-cgl-gen-hi-235",
+        examId: "ssc-cgl",
+        title: "SSC CGL सेट 8 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "कानून के शासन और मानवाधिकारों को बनाए रखने में न्यायपालिका की भूमिका।"
+    },
+    {
+        id: "ssc-cgl-gen-en-236",
+        examId: "ssc-cgl",
+        title: "SSC CGL Set 9 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Infrastructure development as a catalyst for industrial and economic expansion."
+    },
+    {
+        id: "ssc-cgl-gen-hi-237",
+        examId: "ssc-cgl",
+        title: "SSC CGL सेट 9 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "औद्योगिक और आर्थिक विस्तार के उत्प्रेरक के रूप में बुनियादी ढांचे का विकास।"
+    },
+    {
+        id: "ssc-cgl-gen-en-238",
+        examId: "ssc-cgl",
+        title: "SSC CGL Set 10 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Corporate governance and the importance of ethical business practices."
+    },
+    {
+        id: "ssc-cgl-gen-hi-239",
+        examId: "ssc-cgl",
+        title: "SSC CGL सेट 10 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "कॉर्पोरेट प्रशासन और नैतिक व्यावसायिक प्रथाओं का महत्व।"
+    },
+    {
+        id: "rrb-ntpc-gen-en-240",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC Set 1 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Railway modernization and the introduction of high-speed passenger trains."
+    },
+    {
+        id: "rrb-ntpc-gen-hi-241",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC सेट 1 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "रेलवे आधुनिकीकरण और उच्च गति वाली यात्री ट्रेनों की शुरुआत।"
+    },
+    {
+        id: "rrb-ntpc-gen-en-242",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC Set 2 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "Safety protocols and advanced signaling systems in rail transport."
+    },
+    {
+        id: "rrb-ntpc-gen-hi-243",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC सेट 2 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "रेल परिवहन में सुरक्षा प्रोटोकॉल और उन्नत सिग्नलिंग सिस्टम।"
+    },
+    {
+        id: "rrb-ntpc-gen-en-244",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC Set 3 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "The history and development of the Indian railway network since 1853."
+    },
+    {
+        id: "rrb-ntpc-gen-hi-245",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC सेट 3 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "1853 से भारतीय रेलवे नेटवर्क का इतिहास और विकास।"
+    },
+    {
+        id: "rrb-ntpc-gen-en-246",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC Set 4 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Technological advancements in track maintenance and rolling stock."
+    },
+    {
+        id: "rrb-ntpc-gen-hi-247",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC सेट 4 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "ट्रैक रखरखाव और रोलिंग स्टॉक में तकनीकी प्रगति।"
+    },
+    {
+        id: "rrb-ntpc-gen-en-248",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC Set 5 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "Railway logistics and its importance in national freight movement."
+    },
+    {
+        id: "rrb-ntpc-gen-hi-249",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC सेट 5 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "राष्ट्रीय माल ढुलाई में रेलवे रसद और इसका महत्व।"
+    },
+    {
+        id: "rrb-ntpc-gen-en-250",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC Set 6 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Passenger amenities and the digitisation of railway ticketing services."
+    },
+    {
+        id: "rrb-ntpc-gen-hi-251",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC सेट 6 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "यात्री सुविधाएं और रेलवे टिकटिंग सेवाओं का डिजिटलीकरण।"
+    },
+    {
+        id: "rrb-ntpc-gen-en-252",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC Set 7 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "The role of railways in connecting remote regions and promoting tourism."
+    },
+    {
+        id: "rrb-ntpc-gen-hi-253",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC सेट 7 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "दूरदराज के क्षेत्रों को जोड़ने और पर्यटन को बढ़ावा देने में रेलवे की भूमिका।"
+    },
+    {
+        id: "rrb-ntpc-gen-en-254",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC Set 8 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "Dedicated freight corridors and their impact on industrial logistics."
+    },
+    {
+        id: "rrb-ntpc-gen-hi-255",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC सेट 8 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "समेकित माल ढुलाई गलियारे और औद्योगिक रसद पर उनका प्रभाव।"
+    },
+    {
+        id: "rrb-ntpc-gen-en-256",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC Set 9 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Sustainable practices in railway operations and energy efficiency."
+    },
+    {
+        id: "rrb-ntpc-gen-hi-257",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC सेट 9 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "रेलवे संचालन और ऊर्जा दक्षता में टिकाऊ प्रथाएं।"
+    },
+    {
+        id: "rrb-ntpc-gen-en-258",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC Set 10 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Public-private partnerships in the expansion of railway infrastructure."
+    },
+    {
+        id: "rrb-ntpc-gen-hi-259",
+        examId: "rrb-ntpc",
+        title: "RRB NTPC सेट 10 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "रेलवे बुनियादी ढांचे के विस्तार में सार्वजनिक-निजी भागीदारी।"
+    },
+    {
+        id: "sbi-po-gen-en-260",
+        examId: "sbi-po",
+        title: "SBI PO Set 1 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Monetary policy and the role of the Reserve Bank of India in inflation control."
+    },
+    {
+        id: "sbi-po-gen-hi-261",
+        examId: "sbi-po",
+        title: "SBI PO सेट 1 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "मौद्रिक नीति और मुद्रास्फीति नियंत्रण में भारतीय रिजर्व बैंक की भूमिका।"
+    },
+    {
+        id: "sbi-po-gen-en-262",
+        examId: "sbi-po",
+        title: "SBI PO Set 2 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "Digital banking innovations and the rise of mobile payment systems in India."
+    },
+    {
+        id: "sbi-po-gen-hi-263",
+        examId: "sbi-po",
+        title: "SBI PO सेट 2 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "डिजिटल बैंकिंग नवाचार और भारत में मोबाइल भुगतान प्रणालियों का उदय।"
+    },
+    {
+        id: "sbi-po-gen-en-264",
+        examId: "sbi-po",
+        title: "SBI PO Set 3 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Financial inclusion and the importance of banking services for the unbanked."
+    },
+    {
+        id: "sbi-po-gen-hi-265",
+        examId: "sbi-po",
+        title: "SBI PO सेट 3 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "वित्तीय समावेशन और बैंकिंग रहित लोगों के लिए बैंकिंग सेवाओं का महत्व।"
+    },
+    {
+        id: "sbi-po-gen-en-266",
+        examId: "sbi-po",
+        title: "SBI PO Set 4 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "The impact of non-performing assets on the stability of the banking sector."
+    },
+    {
+        id: "sbi-po-gen-hi-267",
+        examId: "sbi-po",
+        title: "SBI PO सेट 4 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "बैंकिंग क्षेत्र की स्थिरता पर गैर-निष्पादित परिसंपत्तियों का प्रभाव।"
+    },
+    {
+        id: "sbi-po-gen-en-268",
+        examId: "sbi-po",
+        title: "SBI PO Set 5 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "Banking regulations and the implementation of Basel III norms in India."
+    },
+    {
+        id: "sbi-po-gen-hi-269",
+        examId: "sbi-po",
+        title: "SBI PO सेट 5 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "बैंकिंग विनियमन और भारत में बेसल III मानदंडों का कार्यान्वयन।"
+    },
+    {
+        id: "sbi-po-gen-en-270",
+        examId: "sbi-po",
+        title: "SBI PO Set 6 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Risk management strategies in commercial banking and credit appraisal."
+    },
+    {
+        id: "sbi-po-gen-hi-271",
+        examId: "sbi-po",
+        title: "SBI PO सेट 6 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "वाणिज्यिक बैंकिंग और क्रेडिट मूल्यांकन में जोखिम प्रबंधन रणनीतियां।"
+    },
+    {
+        id: "sbi-po-gen-en-272",
+        examId: "sbi-po",
+        title: "SBI PO Set 7 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Customer service excellence and digital transformation in retail banking."
+    },
+    {
+        id: "sbi-po-gen-hi-273",
+        examId: "sbi-po",
+        title: "SBI PO सेट 7 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "रिटेल बैंकिंग में ग्राहक सेवा उत्कृष्टता और डिजिटल परिवर्तन।"
+    },
+    {
+        id: "sbi-po-gen-en-274",
+        examId: "sbi-po",
+        title: "SBI PO Set 8 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "The role of public sector banks in supporting national economic priorities."
+    },
+    {
+        id: "sbi-po-gen-hi-275",
+        examId: "sbi-po",
+        title: "SBI PO सेट 8 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "राष्ट्रीय आर्थिक प्राथमिकताओं का समर्थन करने में सार्वजनिक क्षेत्र के बैंकों की भूमिका।"
+    },
+    {
+        id: "sbi-po-gen-en-276",
+        examId: "sbi-po",
+        title: "SBI PO Set 9 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Microfinance and its contribution to rural entrepreneurship and development."
+    },
+    {
+        id: "sbi-po-gen-hi-277",
+        examId: "sbi-po",
+        title: "SBI PO सेट 9 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "सूक्ष्म वित्त और ग्रामीण उद्यमिता और विकास में इसका योगदान।"
+    },
+    {
+        id: "sbi-po-gen-en-278",
+        examId: "sbi-po",
+        title: "SBI PO Set 10 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Cybersecurity in banking: Protecting financial data from digital fraud."
+    },
+    {
+        id: "sbi-po-gen-hi-279",
+        examId: "sbi-po",
+        title: "SBI PO सेट 10 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "बैंकिंग में साइबर सुरक्षा: डिजिटल धोखाधड़ी से वित्तीय डेटा की रक्षा करना।"
+    },
+    {
+        id: "judiciary-gen-en-280",
+        examId: "judiciary",
+        title: "Judiciary Set 1 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "The doctrine of the basic structure of the Indian constitution."
+    },
+    {
+        id: "judiciary-gen-hi-281",
+        examId: "judiciary",
+        title: "Judiciary सेट 1 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "भारतीय संविधान की मूल संरचना का सिद्धांत।"
+    },
+    {
+        id: "judiciary-gen-en-282",
+        examId: "judiciary",
+        title: "Judiciary Set 2 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "Fundamental rights and their protection through judicial review."
+    },
+    {
+        id: "judiciary-gen-hi-283",
+        examId: "judiciary",
+        title: "Judiciary सेट 2 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "मौलिक अधिकार और न्यायिक समीक्षा के माध्यम से उनका संरक्षण।"
+    },
+    {
+        id: "judiciary-gen-en-284",
+        examId: "judiciary",
+        title: "Judiciary Set 3 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "Principles of natural justice and their application in administrative law."
+    },
+    {
+        id: "judiciary-gen-hi-285",
+        examId: "judiciary",
+        title: "Judiciary सेट 3 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "प्राकृतिक न्याय के सिद्धांत और प्रशासनिक कानून में उनका अनुप्रयोग।"
+    },
+    {
+        id: "judiciary-gen-en-286",
+        examId: "judiciary",
+        title: "Judiciary Set 4 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "The role of the Supreme Court in interpreting the law and delivering justice."
+    },
+    {
+        id: "judiciary-gen-hi-287",
+        examId: "judiciary",
+        title: "Judiciary सेट 4 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "कानून की व्याख्या करने और न्याय प्रदान करने में सुप्रीम कोर्ट की भूमिका।"
+    },
+    {
+        id: "judiciary-gen-en-288",
+        examId: "judiciary",
+        title: "Judiciary Set 5 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "Legal procedures in civil and criminal cases under the Indian legal system."
+    },
+    {
+        id: "judiciary-gen-hi-289",
+        examId: "judiciary",
+        title: "Judiciary सेट 5 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "भारतीय कानूनी प्रणाली के तहत दीवानी और आपराधिक मामलों में कानूनी प्रक्रियाएं।"
+    },
+    {
+        id: "judiciary-gen-en-290",
+        examId: "judiciary",
+        title: "Judiciary Set 6 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "The importance of alternative dispute resolution mechanisms like arbitration."
+    },
+    {
+        id: "judiciary-gen-hi-291",
+        examId: "judiciary",
+        title: "Judiciary सेट 6 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "मध्यस्थता जैसे वैकल्पिक विवाद समाधान तंत्र का महत्व।"
+    },
+    {
+        id: "judiciary-gen-en-292",
+        examId: "judiciary",
+        title: "Judiciary Set 7 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Protection of human rights through public interest litigation in India."
+    },
+    {
+        id: "judiciary-gen-hi-293",
+        examId: "judiciary",
+        title: "Judiciary सेट 7 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "भारत में जनहित याचिका के माध्यम से मानवाधिकारों का संरक्षण।"
+    },
+    {
+        id: "judiciary-gen-en-294",
+        examId: "judiciary",
+        title: "Judiciary Set 8 (EN-MEDIUM)",
+        language: "english",
+        difficulty: "medium",
+        content: "Constitutional provisions regarding the independence of the judiciary."
+    },
+    {
+        id: "judiciary-gen-hi-295",
+        examId: "judiciary",
+        title: "Judiciary सेट 8 (HI-MEDIUM)",
+        language: "hindi",
+        difficulty: "medium",
+        content: "न्यायपालिका की स्वतंत्रता के संबंध में संवैधानिक प्रावधान।"
+    },
+    {
+        id: "judiciary-gen-en-296",
+        examId: "judiciary",
+        title: "Judiciary Set 9 (EN-HARD)",
+        language: "english",
+        difficulty: "hard",
+        content: "The evolution of environmental jurisprudence and the polluter pays principle."
+    },
+    {
+        id: "judiciary-gen-hi-297",
+        examId: "judiciary",
+        title: "Judiciary सेट 9 (HI-HARD)",
+        language: "hindi",
+        difficulty: "hard",
+        content: "पर्यावरण न्यायशास्त्र का विकास और 'प्रदूषक भुगतान' सिद्धांत।"
+    },
+    {
+        id: "judiciary-gen-en-298",
+        examId: "judiciary",
+        title: "Judiciary Set 10 (EN-EASY)",
+        language: "english",
+        difficulty: "easy",
+        content: "Legal ethics and the responsibility of lawyers towards the court and society."
+    },
+    {
+        id: "judiciary-gen-hi-299",
+        examId: "judiciary",
+        title: "Judiciary सेट 10 (HI-EASY)",
+        language: "hindi",
+        difficulty: "easy",
+        content: "कानूनी नैतिकता और अदालत तथा समाज के प्रति वकीलों की जिम्मेदारी।"
+    },
+    // --- END GENERATED ---
     // SSC CHSL Sets (Govt - Standard)
     {
         id: "ssc-set-1",

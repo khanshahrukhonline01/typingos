@@ -20,7 +20,7 @@ export const TypingCaret = memo(({ top, left, style, smooth, isTyping }: TypingC
         stiffness: 500,
         damping: 28,
         mass: 0.5
-    };
+    } as const;
 
     const hardTransition = {
         duration: 0

@@ -5,13 +5,14 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { VirtualKeyboard } from "@/components/typing/VirtualKeyboard";
 import { TypingDisplay } from "@/components/typing/TypingDisplay";
-import { 
-  X, RotateCcw, Trophy, Target, Zap, Coins, 
+import {
+  X, RotateCcw, Trophy, Target, Zap, Coins,
   CheckCircle2, XCircle, Keyboard, Timer
 } from "lucide-react";
 import { ProgressiveLesson } from "@/data/globalExamsData";
 import { useGamification } from "@/contexts/GamificationContext";
 import { toast } from "sonner";
+import { useKeyboardSounds } from "@/hooks/useKeyboardSounds";
 
 interface LessonPracticeProps {
   lesson: ProgressiveLesson;
@@ -26,7 +27,7 @@ export const LessonPractice: React.FC<LessonPracticeProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { addXP, addCoins } = useGamification();
-  
+
   const [userInput, setUserInput] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
@@ -35,7 +36,10 @@ export const LessonPractice: React.FC<LessonPracticeProps> = ({
   const [showKeyboard, setShowKeyboard] = useState(true);
   const [lastPressedKey, setLastPressedKey] = useState<string>("");
   const [lastKeyCorrect, setLastKeyCorrect] = useState(true);
-  
+  const [wordCompletedTrigger, setWordCompletedTrigger] = useState(0);
+
+  const { playSound, playErrorSound } = useKeyboardSounds();
+
   // Stats
   const [correctChars, setCorrectChars] = useState(0);
   const [incorrectChars, setIncorrectChars] = useState(0);
@@ -51,21 +55,21 @@ export const LessonPractice: React.FC<LessonPracticeProps> = ({
       const interval = setInterval(() => {
         const elapsed = (Date.now() - startTime) / 1000;
         setTimeElapsed(elapsed);
-        
+
         // WPM = (characters / 5) / (time in minutes)
         const minutes = elapsed / 60;
         if (minutes > 0) {
           const currentWpm = Math.round((correctChars / 5) / minutes);
           setWpm(currentWpm);
         }
-        
+
         // Accuracy
         const total = correctChars + incorrectChars;
         if (total > 0) {
           setAccuracy(Math.round((correctChars / total) * 100));
         }
       }, 100);
-      
+
       return () => clearInterval(interval);
     }
   }, [isStarted, startTime, isFinished, correctChars, incorrectChars]);
@@ -99,8 +103,11 @@ export const LessonPractice: React.FC<LessonPracticeProps> = ({
 
     if (isCorrect) {
       setCorrectChars(prev => prev + 1);
+      playSound(undefined, true);
+      if (key === ' ') setWordCompletedTrigger(prev => prev + 1);
     } else {
       setIncorrectChars(prev => prev + 1);
+      playErrorSound(undefined);
     }
 
     setUserInput(prev => prev + key);
@@ -119,13 +126,13 @@ export const LessonPractice: React.FC<LessonPracticeProps> = ({
     const finalWpm = Math.round((correctChars / 5) / Math.max(finalMinutes, 0.01));
     const total = correctChars + incorrectChars;
     const finalAccuracy = total > 0 ? Math.round((correctChars / total) * 100) : 100;
-    
+
     setWpm(finalWpm);
     setAccuracy(finalAccuracy);
-    
+
     // Check if passed
     const passed = finalWpm >= lesson.targetWpm && finalAccuracy >= lesson.targetAccuracy;
-    
+
     if (passed) {
       addXP(lesson.xpReward);
       addCoins(lesson.coinReward);
@@ -189,7 +196,7 @@ export const LessonPractice: React.FC<LessonPracticeProps> = ({
   const passed = wpm >= lesson.targetWpm && accuracy >= lesson.targetAccuracy;
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center p-4"
       tabIndex={0}
@@ -289,8 +296,8 @@ export const LessonPractice: React.FC<LessonPracticeProps> = ({
             <div className="flex items-center justify-center gap-2 flex-wrap">
               <span className="text-sm text-muted-foreground mr-2">Focus keys:</span>
               {lesson.keys.map(key => (
-                <kbd 
-                  key={key} 
+                <kbd
+                  key={key}
                   className="px-3 py-1.5 text-sm bg-primary/20 text-primary rounded-lg border border-primary/30 font-mono"
                 >
                   {key.toUpperCase()}
@@ -307,8 +314,9 @@ export const LessonPractice: React.FC<LessonPracticeProps> = ({
             userInput={userInput}
             currentIndex={currentIndex}
             isHindi={false}
+            particleTrigger={wordCompletedTrigger}
           />
-          
+
           {!isStarted && !isFinished && (
             <p className="text-center text-muted-foreground mt-6 animate-pulse">
               Start typing to begin the lesson...
@@ -408,7 +416,7 @@ export const LessonPractice: React.FC<LessonPracticeProps> = ({
 
         {/* Keyboard Hint */}
         <div className="text-center text-xs text-muted-foreground py-2 bg-background/50 border-t border-border">
-          Press <kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground">Tab</kbd> to restart • 
+          Press <kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground">Tab</kbd> to restart •
           <kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground ml-1">Esc</kbd> to close
         </div>
       </Card>

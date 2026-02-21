@@ -28,7 +28,7 @@ export function AICoach({ context = "general" }: { context?: "general" | "typing
 
       const response = await aiService.generateText({
         modelId: 'openai:gpt-3.5-turbo',
-        systemPrompt: "You are a world-class typing coach. Provide one short, punchy, actionable tip (max 20 words) for the user based on their stats. Be encouraging but direct. Output ONLY the tip text.",
+        systemPrompt: "You are a world-class typing coach and career advisor. Provide one short, punchy, actionable tip (max 20 words) based on the user's stats and their career readiness for typing-heavy roles. Output ONLY the tip text.",
         prompt: stats,
         temperature: 0.7
       });
@@ -185,27 +185,37 @@ export function AICoach({ context = "general" }: { context?: "general" | "typing
 
 export function AIInsightCard({ wpm, accuracy, mistakes }: { wpm: number; accuracy: number; mistakes: string[] }) {
   const getInsight = () => {
+    let jobReadiness = "";
+    if (wpm >= 80) jobReadiness = "Ready for high-speed roles: Court Reporter, Legal Secretary, or Real-time Captioner.";
+    else if (wpm >= 60) jobReadiness = "Solid for mid-level roles: Executive Assistant, Data Manager, or Transcriptionist.";
+    else if (wpm >= 35) jobReadiness = "Qualifies for entry roles: Clerk, Data Entry Operator, or Customer Support.";
+    else jobReadiness = "Focus on building foundational speed for administrative roles.";
+
     if (accuracy >= 98 && wpm >= 80) {
-      return "Outstanding performance! You're typing like a pro. Consider challenging yourself with harder texts.";
+      return `Outstanding! You're typing like a pro. ${jobReadiness}`;
     }
     if (accuracy < 90) {
-      return `Focus on accuracy first. You mistyped: ${mistakes.slice(0, 3).join(", ")}. Practice these keys specifically.`;
+      const uniqueMistakes = Array.from(new Set(mistakes)).slice(0, 3);
+      return `Focus on accuracy first. You frequently mistyped: ${uniqueMistakes.join(", ")}. ${jobReadiness}`;
     }
     if (wpm < 40) {
-      return "Building a solid foundation! Try the home row lessons to improve your base speed.";
+      return `Building a solid foundation! ${jobReadiness} Try the home row lessons.`;
     }
-    if (wpm >= 60 && accuracy >= 95) {
-      return "Great balance of speed and accuracy! You're ready to push for higher WPM.";
-    }
-    return "Keep practicing! Consistency is key to improvement.";
+    return `Great balance! ${jobReadiness} Consistency is key to improvement.`;
   };
 
   return (
-    <div className="flex items-start gap-3 p-4 bg-primary/5 rounded-lg border border-primary/20">
-      <Bot className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-      <div>
-        <p className="font-medium text-foreground text-sm mb-1">AI Analysis</p>
-        <p className="text-sm text-muted-foreground">{getInsight()}</p>
+    <div className="flex items-start gap-4 p-5 bg-gradient-to-br from-primary/10 to-accent/5 rounded-xl border border-primary/20 shadow-sm relative overflow-hidden group">
+      <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-110" />
+      <div className="p-2.5 rounded-lg bg-primary/10 shrink-0">
+        <Bot className="w-6 h-6 text-primary" />
+      </div>
+      <div className="relative">
+        <div className="flex items-center gap-2 mb-1.5">
+          <p className="font-bold text-foreground text-sm uppercase tracking-wider">Career Intelligence</p>
+          <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
+        </div>
+        <p className="text-sm text-muted-foreground leading-relaxed">{getInsight()}</p>
       </div>
     </div>
   );

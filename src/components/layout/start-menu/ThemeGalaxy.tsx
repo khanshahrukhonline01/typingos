@@ -1,9 +1,26 @@
 
 import { cn } from "@/utils/utils";
+import React, { useRef, useEffect } from "react";
 import { Palette, Crown } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useGamification } from "@/contexts/GamificationContext";
 import { themeOptions } from "@/data/navigationData";
+
+/** Applies --theme-color imperatively to avoid JSX style= prop */
+const ThemeColorDot: React.FC<{ color: string }> = ({ color }) => {
+    const outerRef = useRef<HTMLDivElement>(null);
+    const innerRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (outerRef.current) outerRef.current.style.border = `2.5px solid ${color}`;
+        if (innerRef.current) innerRef.current.style.backgroundColor = color;
+    }, [color]);
+    return (
+        <div ref={outerRef} className="w-8 h-8 rounded-full shadow-inner flex items-center justify-center bg-background">
+            <div ref={innerRef} className="w-4 h-4 rounded-full" />
+        </div>
+    );
+};
+
 
 interface ThemeGalaxyProps {
     setSubModalOpen: (open: boolean) => void;
@@ -30,9 +47,7 @@ export function ThemeGalaxy({ setSubModalOpen }: ThemeGalaxyProps) {
                             theme === opt.value ? "border-primary bg-primary/5 shadow-lg shadow-primary/10" : "border-border/50 hover:border-primary/30"
                         )}
                     >
-                        <div className="w-8 h-8 rounded-full shadow-inner flex items-center justify-center bg-background" style={{ border: `2.5px solid ${opt.color}` }}>
-                            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: opt.color }} />
-                        </div>
+                        <ThemeColorDot color={opt.color} />
                         <span className="text-[9px] font-black uppercase tracking-tighter">{opt.name}</span>
                         {opt.premium && !userStats.isPremium && (
                             <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px] flex items-center justify-center">

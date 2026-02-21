@@ -25,54 +25,44 @@ export interface AmbientEnvironment {
 
 const AMBIENT_ENVIRONMENTS: AmbientEnvironment[] = [
     {
-        id: "rainy_cafe",
-        name: "Rainy Café",
-        description: "Cozy coffee shop with rain outside",
-        videoUrl: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=1920&h=1080&fit=crop",
-        audioUrl: "https://cdn.freesound.org/previews/531/531947_9497060-lq.mp3",
-        thumbnail: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=400&h=300&fit=crop",
+        id: "cyberpunk_rain",
+        name: "Cyberpunk Rain",
+        description: "Neon-soaked streets in the year 2099",
+        videoUrl: "https://images.unsplash.com/photo-1514565131-0ce082d47s8-2?auto=format&fit=crop&q=80&w=2000", // Placeholder, ideally a real video
+        audioUrl: "https://cdn.freesound.org/previews/343/343605_5641154-lq.mp3", // Rain in car
+        thumbnail: "https://images.unsplash.com/photo-1514565131-0ce082d47s8-2?w=400&h=300&fit=crop",
         isPremium: false,
-        color: "from-amber-900/50 to-stone-900/50"
+        color: "from-purple-950/80 via-blue-900/60 to-black"
     },
     {
-        id: "cyberpunk_city",
-        name: "Cyberpunk City",
-        description: "Neon-lit futuristic metropolis",
-        videoUrl: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&h=1080&fit=crop",
-        audioUrl: "https://cdn.freesound.org/previews/466/466677_4397472-lq.mp3",
-        thumbnail: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop",
-        isPremium: false,
-        color: "from-purple-900/50 to-cyan-900/50"
-    },
-    {
-        id: "forest_stream",
-        name: "Forest Stream",
-        description: "Peaceful woodland with flowing water",
-        videoUrl: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=1920&h=1080&fit=crop",
-        audioUrl: "https://cdn.freesound.org/previews/531/531584_9497060-lq.mp3",
-        thumbnail: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=400&h=300&fit=crop",
+        id: "mountain_cabin",
+        name: "Mountain Cabin",
+        description: "Cozy fireplace during a snowstorm",
+        videoUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000",
+        audioUrl: "https://cdn.freesound.org/previews/404/404494_7547191-lq.mp3", // Crackling fire
+        thumbnail: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=300&fit=crop",
         isPremium: true,
-        color: "from-green-900/50 to-emerald-900/50"
+        color: "from-orange-950/70 via-stone-900/60 to-black"
     },
     {
-        id: "ocean_waves",
-        name: "Ocean Waves",
-        description: "Calming beach with waves",
-        videoUrl: "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1920&h=1080&fit=crop",
-        audioUrl: "https://cdn.freesound.org/previews/467/467090_4397472-lq.mp3",
-        thumbnail: "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=400&h=300&fit=crop",
-        isPremium: true,
-        color: "from-blue-900/50 to-teal-900/50"
-    },
-    {
-        id: "space_station",
-        name: "Space Station",
-        description: "Orbiting Earth in zero gravity",
-        videoUrl: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1920&h=1080&fit=crop",
-        audioUrl: "https://cdn.freesound.org/previews/531/531947_9497060-lq.mp3",
+        id: "deep_space",
+        name: "Deep Space",
+        description: "Floating among distant nebulae",
+        videoUrl: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=2000",
+        audioUrl: "https://cdn.freesound.org/previews/512/512395_10214840-lq.mp3", // Space drone
         thumbnail: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&h=300&fit=crop",
         isPremium: true,
-        color: "from-slate-900/50 to-indigo-900/50"
+        color: "from-indigo-950/80 via-slate-900/60 to-black"
+    },
+    {
+        id: "emerald_forest",
+        name: "Emerald Forest",
+        description: "Sunlight filtering through ancient trees",
+        videoUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=2000",
+        audioUrl: "https://cdn.freesound.org/previews/244/244583_3889004-lq.mp3", // Forest birds
+        thumbnail: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop",
+        isPremium: false,
+        color: "from-emerald-950/70 via-green-900/60 to-black"
     }
 ];
 
@@ -91,6 +81,7 @@ export const ZenWorkspace: React.FC<ZenWorkspaceProps> = ({ children, isActive =
     const [isAudioPlaying, setIsAudioPlaying] = useState(false);
     const [volume, setVolume] = useState([50]);
     const [focusMode, setFocusMode] = useState(false);
+    const bgRef = useRef<HTMLDivElement>(null);
 
     // Handle audio playback
     useEffect(() => {
@@ -98,6 +89,13 @@ export const ZenWorkspace: React.FC<ZenWorkspaceProps> = ({ children, isActive =
             audioRef.current.volume = volume[0] / 100;
         }
     }, [volume]);
+
+    // Apply background image imperatively to avoid JSX style= prop
+    useEffect(() => {
+        if (bgRef.current) {
+            bgRef.current.style.backgroundImage = `url(${selectedEnv.videoUrl})`;
+        }
+    }, [selectedEnv.videoUrl]);
 
     const toggleAudio = () => {
         if (audioRef.current) {
@@ -127,8 +125,8 @@ export const ZenWorkspace: React.FC<ZenWorkspaceProps> = ({ children, isActive =
         <div className="relative min-h-screen overflow-hidden">
             {/* Background Image */}
             <div
+                ref={bgRef}
                 className="fixed inset-0 z-0 bg-cover bg-center transition-all duration-1000"
-                style={{ backgroundImage: `url(${selectedEnv.videoUrl})` }}
             />
 
             {/* Gradient Overlay */}

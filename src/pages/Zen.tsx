@@ -21,6 +21,7 @@ export default function Zen() {
     } = useTypingSession();
 
     const [isMuted, setIsMuted] = useState(false);
+    const [wordCompletedTrigger, setWordCompletedTrigger] = useState(0);
 
     const {
         text,
@@ -65,6 +66,10 @@ export default function Zen() {
                         playSound(soundType, true);
                     } else {
                         playErrorSound(soundType);
+                    }
+
+                    if (isCorrect && e.key === " ") {
+                        setWordCompletedTrigger(prev => prev + 1);
                     }
                 }
                 handleKeyPress(e.key);
@@ -145,6 +150,7 @@ export default function Zen() {
                             text={text}
                             userInput={userInput}
                             currentIndex={currentIndex}
+                            particleTrigger={wordCompletedTrigger}
                         />
                     </div>
 

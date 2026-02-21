@@ -296,7 +296,7 @@ export function TypingConfigBar() {
                         }
                     />
                     {examConfig && (
-                        <button onClick={clearExam} className="hover:text-destructive text-muted-foreground transition-colors">
+                        <button onClick={clearExam} title={t("Clear Exam Selection")} className="hover:text-destructive text-muted-foreground transition-colors">
                             <X className="w-4 h-4" />
                         </button>
                     )}
@@ -312,7 +312,7 @@ export function TypingConfigBar() {
                     />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <button className="p-2 rounded-lg text-muted-foreground hover:bg-white/5 hover:text-primary transition-all">
+                            <button title={t("Sound Settings")} className="p-2 rounded-lg text-muted-foreground hover:bg-white/5 hover:text-primary transition-all">
                                 {soundType === 'none' ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                             </button>
                         </DropdownMenuTrigger>
@@ -325,7 +325,7 @@ export function TypingConfigBar() {
                     </DropdownMenu>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <button className="p-2 rounded-lg text-muted-foreground hover:bg-white/5 hover:text-primary transition-all">
+                            <button title={t("Theme Settings")} className="p-2 rounded-lg text-muted-foreground hover:bg-white/5 hover:text-primary transition-all">
                                 <Palette className="w-4 h-4" />
                             </button>
                         </DropdownMenuTrigger>

@@ -212,7 +212,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ type }) 
                     <CardContent>
                         <div className="flex flex-col gap-2 scale-90 origin-top-left">
                             {KEYBOARD_LAYOUT.map((row, i) => (
-                                <div key={i} className="flex gap-2 justify-center" style={{ marginLeft: `${i * 20}px` }}>
+                                <div key={i} className={cn("flex gap-2 justify-center", i === 1 && "ml-5", i === 2 && "ml-10")}>
                                     {row.map(key => {
                                         const isWeak = analysis.weakKeys.includes(key.toLowerCase());
                                         return (

@@ -1,17 +1,27 @@
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Download, Share2, Trophy } from 'lucide-react';
+import { Download, Share2, Trophy, Skull } from 'lucide-react';
 import { toast } from 'sonner';
+import { cn } from '@/utils/utils';
 
 interface ViralShareCardProps {
     wpm: number;
     accuracy: number;
     rank: string; // e.g., "Top 1%"
     username: string;
+    isBattleRoyale?: boolean;
+    defeatedPlayers?: number;
 }
 
-export const ViralShareCard: React.FC<ViralShareCardProps> = ({ wpm, accuracy, rank, username }) => {
+export const ViralShareCard: React.FC<ViralShareCardProps> = ({
+    wpm,
+    accuracy,
+    rank,
+    username,
+    isBattleRoyale,
+    defeatedPlayers = 0
+}) => {
     const cardRef = useRef<HTMLDivElement>(null);
 
     const handleShare = async () => {
@@ -28,8 +38,10 @@ export const ViralShareCard: React.FC<ViralShareCardProps> = ({ wpm, accuracy, r
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: 'Check out my TypingOS Speed!',
-                    text: `I just hit ${wpm} WPM on TypingOS! Can you beat me?`,
+                    title: isBattleRoyale ? 'I Survived Typing Battle Royale!' : 'Check out my TypingOS Speed!',
+                    text: isBattleRoyale
+                        ? `I defeated ${defeatedPlayers} players in a Typing Battle Royale with ${wpm} WPM! 🔥`
+                        : `I just hit ${wpm} WPM on TypingOS! Can you beat me?`,
                     url: shareLink,
                 });
                 toast.success("Shared successfully!");
@@ -81,13 +93,20 @@ export const ViralShareCard: React.FC<ViralShareCardProps> = ({ wpm, accuracy, r
 
                     {/* Main Stats */}
                     <div className="text-center space-y-2">
-                        <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mb-4 shadow-lg shadow-indigo-500/30">
-                            <Trophy className="w-10 h-10 text-white" />
+                        <div className={cn(
+                            "inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 shadow-lg",
+                            isBattleRoyale
+                                ? "bg-gradient-to-br from-red-500 to-rose-600 shadow-rose-500/30"
+                                : "bg-gradient-to-br from-indigo-500 to-purple-600 shadow-indigo-500/30"
+                        )}>
+                            {isBattleRoyale ? <Skull className="w-10 h-10 text-white" /> : <Trophy className="w-10 h-10 text-white" />}
                         </div>
                         <h1 className="text-7xl font-black tracking-tighter italic leading-none bg-clip-text text-transparent bg-gradient-to-b from-white to-white/50">
                             {wpm}
                         </h1>
-                        <p className="text-sm font-bold uppercase tracking-[0.5em] text-indigo-400">WPM Speed</p>
+                        <p className="text-sm font-bold uppercase tracking-[0.5em] text-indigo-400">
+                            {isBattleRoyale ? "SURVIVAL WPM" : "WPM Speed"}
+                        </p>
                     </div>
 
                     {/* Secondary Stats */}
@@ -97,8 +116,12 @@ export const ViralShareCard: React.FC<ViralShareCardProps> = ({ wpm, accuracy, r
                             <p className="text-2xl font-black">{accuracy}%</p>
                         </div>
                         <div className="p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
-                            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Global Rank</p>
-                            <p className="text-2xl font-black text-amber-400">{rank}</p>
+                            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+                                {isBattleRoyale ? "Defeated" : "Global Rank"}
+                            </p>
+                            <p className={cn("text-2xl font-black", isBattleRoyale ? "text-rose-500" : "text-amber-400")}>
+                                {isBattleRoyale ? `${defeatedPlayers} Players` : rank}
+                            </p>
                         </div>
                     </div>
 

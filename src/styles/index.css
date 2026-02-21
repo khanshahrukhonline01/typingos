@@ -323,10 +323,21 @@
     text-shadow: 0 0 20px hsl(38 92% 50% / 0.5);
   }
 
+  /* Sidebar CSS custom properties — defined here to avoid inline style= prop */
+  .sidebar-wrapper {
+    --sidebar-width: 16rem;
+    --sidebar-width-icon: 3rem;
+  }
+
   /* Hide scrollbar but keep functionality */
   .scrollbar-hide {
     -ms-overflow-style: none;
-    scrollbar-width: none;
+  }
+
+  @supports (scrollbar-width: none) {
+    .scrollbar-hide {
+      scrollbar-width: none;
+    }
   }
 
   .scrollbar-hide::-webkit-scrollbar {
@@ -359,9 +370,11 @@
   }
 
   /* Firefox support */
-  .custom-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: hsla(38, 92%, 50%, 0.4) transparent;
+  @supports (scrollbar-width: thin) {
+    .custom-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: hsla(38, 92%, 50%, 0.4) transparent;
+    }
   }
 
   /* Safe area support for mobile */

@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { motion } from "framer-motion";
+import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +20,9 @@ import {
   Target,
   Keyboard,
   BarChart3,
-  Sword
+  Sword,
+  Skull,
+  AlertTriangle
 } from "lucide-react";
 import { toast } from "sonner";
 import { useKeyboardSounds, SoundType } from "@/hooks/useKeyboardSounds";
@@ -26,6 +30,9 @@ import { useRaceHistory } from "@/hooks/useRaceHistory";
 import { RaceLeaderboard } from "@/pages/RaceLeaderboard";
 import { VirtualKeyboard } from "@/components/typing/VirtualKeyboard";
 import { ViralShareCard } from "@/components/social/ViralShareCard";
+import { EliminationUI } from "@/components/multiplayer/EliminationUI";
+import { TypingDisplay } from "@/components/typing/TypingDisplay";
+import { useGamification } from "@/contexts/GamificationContext";
 
 
 interface Racer {
@@ -39,6 +46,7 @@ interface Racer {
   finished: boolean;
   finishTime?: number;
   position?: number;
+  isEliminated?: boolean;
 }
 
 type GameMode = 'lobby' | 'waiting' | 'countdown' | 'racing' | 'results';
@@ -81,16 +89,21 @@ const MultiplayerRace = () => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [botCount, setBotCount] = useState(3);
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard' | 'expert'>('medium');
-  const [soundType, setSoundType] = useState<SoundType>('mechanical');
   const [lastPressedKey, setLastPressedKey] = useState<string | null>(null);
   const [lastKeyCorrect, setLastKeyCorrect] = useState(true);
   const [isBattleRoyale, setIsBattleRoyale] = useState(false);
+  const [eliminationTimer, setEliminationTimer] = useState<number>(15);
+  const [eliminationCycle, setEliminationCycle] = useState(0);
+  const [wordCompletedTrigger, setWordCompletedTrigger] = useState(0);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const botTimerRef = useRef<NodeJS.Timeout | null>(null);
   const { playSound, playErrorSound } = useKeyboardSounds();
+  const { userStats } = useGamification();
   const { saveResult } = useRaceHistory();
+
+  const equippedSound = (userStats.equippedCosmetics?.sound?.replace('sound_', '') || 'mechanical') as SoundType;
 
   // Generate room code
   const generateRoomCode = () => {
@@ -240,21 +253,66 @@ const MultiplayerRace = () => {
     }
   }, [gameMode, startTime, raceText.length]);
 
+  // Battle Royale Elimination Logic
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (gameMode === 'racing' && isBattleRoyale) {
+      interval = setInterval(() => {
+        setEliminationTimer(prev => {
+          if (prev <= 1) {
+            // Elimination Moment
+            setRacers(currentRacers => {
+              const activeRacers = currentRacers.filter(r => !r.isEliminated && !r.finished);
+              if (activeRacers.length <= 1) return currentRacers;
+
+              // Find racer with minimum progress
+              const minProgress = Math.min(...activeRacers.map(r => r.progress));
+              const racerToEliminate = activeRacers.find(r => r.progress === minProgress);
+
+              if (racerToEliminate) {
+                toast.error(`${racerToEliminate.name} ELIMINATED!`, {
+                  description: "Too slow for the Battle Royale zone!",
+                  icon: "💀"
+                });
+                return currentRacers.map(r =>
+                  r.id === racerToEliminate.id ? { ...r, isEliminated: true } : r
+                );
+              }
+              return currentRacers;
+            });
+            setEliminationCycle(c => c + 1);
+            return 15; // Reset timer
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [gameMode, isBattleRoyale]);
+
   // Handle user input
   const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (gameMode !== 'racing') return;
 
     const value = e.target.value;
+    const player = racers.find(r => !r.isBot);
+    if (player?.isEliminated) return;
+
     const lastChar = value[value.length - 1];
     const expectedChar = raceText[value.length - 1];
 
     // Play sound feedback
     if (lastChar === expectedChar) {
-      playSound(soundType, true);
+      playSound(undefined, true); // Uses equipped sound from hook automatically now
       setLastPressedKey(lastChar);
       setLastKeyCorrect(true);
+
+      // Trigger particles on word completion
+      if (lastChar === ' ') {
+        setWordCompletedTrigger(prev => prev + 1);
+      }
     } else if (value.length > userInput.length) {
-      playErrorSound(soundType);
+      playErrorSound(undefined);
       setLastPressedKey(lastChar);
       setLastKeyCorrect(false);
     }
@@ -365,6 +423,8 @@ const MultiplayerRace = () => {
     setElapsedTime(0);
     setStartTime(null);
     setRacers([]);
+    setEliminationTimer(15);
+    setEliminationCycle(0);
   };
 
   // Render lobby
@@ -633,11 +693,23 @@ const MultiplayerRace = () => {
   // Render racing
   const renderRacing = () => {
     const player = racers.find(r => !r.isBot);
+    const activeRacers = racers.filter(r => !r.isEliminated && !r.finished);
+    const isWinner = isBattleRoyale && activeRacers.length === 1 && player && !player.isEliminated;
     const currentIndex = userInput.length;
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 md:p-8">
         <div className="max-w-5xl mx-auto space-y-6">
+          {isBattleRoyale && (
+            <EliminationUI
+              timer={eliminationTimer}
+              isEliminated={!!player?.isEliminated}
+              cycle={eliminationCycle}
+              totalPlayers={racers.length}
+              activePlayers={activeRacers.length}
+              isWinner={!!isWinner}
+            />
+          )}
           {/* Race Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -695,9 +767,28 @@ const MultiplayerRace = () => {
                           Finished
                         </Badge>
                       )}
+                      {racer.isEliminated && (
+                        <Badge variant="destructive" className="bg-destructive">
+                          <Skull className="w-3 h-3 mr-1" />
+                          Eliminated
+                        </Badge>
+                      )}
                     </div>
 
                     <div className="relative h-8 bg-muted/50 rounded-full overflow-hidden border">
+                      {/* Danger Zone Overlay for Battle Royale */}
+                      {isBattleRoyale && (
+                        <motion.div
+                          className="absolute inset-y-0 left-0 bg-destructive/10 border-r-2 border-destructive/30 backdrop-blur-[1px] z-0 transition-all duration-1000"
+                          initial={{ width: "0%" }}
+                          animate={{ width: `${Math.min(95, (eliminationCycle * 10))}%` }}
+                        >
+                          <div className="absolute top-1/2 -translate-y-1/2 right-2 flex items-center gap-1 text-[8px] font-black text-destructive/60 scale-75 uppercase">
+                            <AlertTriangle className="w-2 h-2" /> Danger
+                          </div>
+                        </motion.div>
+                      )}
+
                       {/* Track markings */}
                       <div className="absolute inset-0 flex">
                         {[...Array(10)].map((_, i) => (
@@ -706,14 +797,28 @@ const MultiplayerRace = () => {
                       </div>
 
                       {/* Racer car */}
-                      <div
-                        className="absolute top-0 h-full transition-all duration-200 flex items-center"
-                        style={{ left: `${Math.min(racer.progress, 95)}% ` }}
+                      <motion.div
+                        className={cn(
+                          "absolute top-0 h-full z-10 flex items-center transition-all duration-200",
+                          racer.isEliminated && "opacity-40 grayscale blur-[0.5px]"
+                        )}
+                        initial={{ left: "0%" }}
+                        animate={{
+                          left: `${Math.min(racer.progress, 95)}%`,
+                          scale: racer.isEliminated ? 0.8 : racer.finished ? 1.2 : 1
+                        }}
+                        transition={{ type: "spring", stiffness: 50 }}
                       >
-                        <div className={`px - 3 py - 1 rounded - full bg - gradient - to - r ${CAR_COLORS[index % CAR_COLORS.length]} text - white font - bold text - sm shadow - lg transform - translate - x - 1 / 2`}>
+                        <div className={cn(
+                          "px-3 py-1 rounded-full bg-gradient-to-r text-white font-bold text-sm shadow-lg transform -translate-x-1/2",
+                          CAR_COLORS[index % CAR_COLORS.length]
+                        )}>
                           {racer.avatar}
                         </div>
-                      </div>
+                        {racer.isEliminated && (
+                          <Skull className="absolute -top-4 left-0 w-4 h-4 text-destructive animate-bounce" />
+                        )}
+                      </motion.div>
 
                       {/* Finish line */}
                       <div className="absolute right-0 top-0 bottom-0 w-2 bg-checkered-flag" />
@@ -728,26 +833,13 @@ const MultiplayerRace = () => {
           <Card>
             <CardContent className="p-6 space-y-4">
               {/* Text to type */}
-              <div className="text-xl leading-relaxed font-mono p-4 bg-muted/30 rounded-lg select-none">
-                {raceText.split("").map((char, index) => {
-                  let className = "text-muted-foreground";
-
-                  if (index < userInput.length) {
-                    if (userInput[index] === char) {
-                      className = "text-green-500";
-                    } else {
-                      className = "text-red-500 bg-red-500/20 rounded";
-                    }
-                  } else if (index === currentIndex) {
-                    className = "text-foreground bg-primary/20 rounded animate-pulse";
-                  }
-
-                  return (
-                    <span key={index} className={className}>
-                      {char}
-                    </span>
-                  );
-                })}
+              <div className="p-4 bg-muted/30 rounded-lg select-none min-h-[120px]">
+                <TypingDisplay
+                  text={raceText}
+                  userInput={userInput}
+                  currentIndex={currentIndex}
+                  particleTrigger={wordCompletedTrigger}
+                />
               </div>
 
               {/* Input field */}
@@ -832,6 +924,8 @@ const MultiplayerRace = () => {
                 accuracy={player?.accuracy || 100}
                 rank={`#${playerPosition} Place`}
                 username={playerName}
+                isBattleRoyale={isBattleRoyale}
+                defeatedPlayers={racers.length - playerPosition}
               />
             </CardContent>
           </Card>

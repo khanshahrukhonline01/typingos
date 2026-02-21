@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useGamification } from "@/contexts/GamificationContext";
 
 interface Particle {
     id: number;
@@ -12,21 +13,41 @@ interface Particle {
 
 export const QuantumParticles: React.FC<{ x: number; y: number; trigger: any }> = ({ x, y, trigger }) => {
     const [particles, setParticles] = useState<Particle[]>([]);
+    const { userStats } = useGamification();
+    const equippedParticle = userStats.equippedCosmetics?.particle;
 
     useEffect(() => {
         if (!trigger) return;
 
-        const colors = ["#8b5cf6", "#ec4899", "#3b82f6", "#10b981", "#fbbf24"];
-        const newParticles: Particle[] = Array.from({ length: 8 }).map((_, i) => ({
+        let colors = ["#8b5cf6", "#ec4899", "#3b82f6", "#10b981", "#fbbf24"];
+        let count = 8;
+        let longevity = 800;
+
+        // Customize based on skin
+        if (equippedParticle === 'particle_fire') {
+            colors = ["#f97316", "#ef4444", "#facc15"];
+            count = 12;
+        } else if (equippedParticle === 'particle_ice') {
+            colors = ["#0ea5e9", "#7dd3fc", "#ffffff"];
+            count = 10;
+        } else if (equippedParticle === 'particle_galaxy') {
+            colors = ["#a855f7", "#6366f1", "#1e1b4b"];
+            count = 15;
+        } else if (equippedParticle === 'particle_quantum') {
+            colors = ["#22d3ee", "#818cf8", "#c084fc"];
+            count = 20;
+        }
+
+        const newParticles: Particle[] = Array.from({ length: count }).map((_, i) => ({
             id: Date.now() + i,
             x,
             y,
             color: colors[Math.floor(Math.random() * colors.length)],
             size: Math.random() * 4 + 2,
-            angle: (Math.PI * 2 * i) / 8 + (Math.random() * 0.5),
+            angle: (Math.PI * 2 * i) / count + (Math.random() * 0.5),
         }));
 
-        setParticles(prev => [...prev, ...newParticles].slice(-40));
+        setParticles(prev => [...prev, ...newParticles].slice(-50));
 
         // Cleanup after animation
         const timeout = setTimeout(() => {

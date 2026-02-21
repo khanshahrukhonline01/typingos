@@ -237,6 +237,25 @@ export const ResultsModal: React.FC<ResultsModalProps> = ({ stats, onRestart, ex
         {/* AI Insight */}
         <AIInsightCard wpm={stats.wpm} accuracy={stats.accuracy} mistakes={[]} />
 
+        {/* AI Adaptive Scaling Suggestions */}
+        {!examConfig && (
+          <div className="mt-4 p-4 rounded-xl bg-primary/5 border border-primary/10 animate-in fade-in zoom-in duration-700">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-primary">AI Scaling Recommendation</span>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {stats.accuracy >= 98 && stats.wpm >= 60 ? (
+                "You're crushing this level! To keep growing, we recommend enabling **Punctuation** or **Numbers** to challenge your precision."
+              ) : stats.accuracy < 90 ? (
+                "Your speed is impressive, but accuracy is vital for exams. We suggest switching to **Easy Mode** (lowercase only) to master your finger positioning."
+              ) : (
+                "You're in the sweet spot! Keep practicing at this level to build rock-solid muscle memory before pushing for more complexity."
+              )}
+            </p>
+          </div>
+        )}
+
         {/* MOMENT OF GLORY (Viral Achievement) */}
         {(stats.wpm > 60 || examConfig) && (
           <div className="mb-6 space-y-4">

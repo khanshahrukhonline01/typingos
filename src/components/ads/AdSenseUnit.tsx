@@ -11,7 +11,6 @@ interface AdSenseUnitProps {
     slotId: string;
     format?: 'auto' | 'fluid' | 'rectangle';
     layoutKey?: string;
-    style?: React.CSSProperties;
     className?: string;
 }
 
@@ -19,7 +18,6 @@ const AdSenseUnit: React.FC<AdSenseUnitProps> = ({
     slotId,
     format = 'auto',
     layoutKey,
-    style,
     className
 }) => {
     useEffect(() => {
@@ -40,7 +38,6 @@ const AdSenseUnit: React.FC<AdSenseUnitProps> = ({
         return (
             <div
                 className={`bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-sm p-4 w-full min-h-[100px] ${className}`}
-                style={style}
             >
                 <div className="text-center">
                     <p className="font-semibold">AdSense Unit</p>
@@ -55,7 +52,6 @@ const AdSenseUnit: React.FC<AdSenseUnitProps> = ({
         <div className={className}>
             <ins
                 className="adsbygoogle block"
-                style={style}
                 data-ad-client={CLIENT_ID}
                 data-ad-slot={slotId}
                 data-ad-format={format}

@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/utils/utils";
 
 const guides = [
   {
@@ -359,33 +360,52 @@ export default function UserGuides() {
                 {guide.sections.map((section) => (
                   <TabsContent key={section.title} value={section.title} className="mt-4">
                     <div className="prose prose-sm dark:prose-invert max-w-none">
-                      {section.content.split('\n\n').map((paragraph, idx) => (
-                        <div key={idx} className="mb-4">
-                          {paragraph.split('\n').map((line, lineIdx) => {
-                            if (line.startsWith('**') && line.endsWith('**')) {
-                              return <h4 key={lineIdx} className="font-semibold text-foreground mt-4 mb-2">{line.replace(/\*\*/g, '')}</h4>;
-                            }
-                            if (line.startsWith('- **')) {
-                              const match = line.match(/- \*\*(.+?)\*\*: (.+)/);
-                              if (match) {
-                                return (
-                                  <div key={lineIdx} className="flex gap-2 ml-4 mb-1">
-                                    <Badge variant="secondary" className="shrink-0">{match[1]}</Badge>
-                                    <span className="text-muted-foreground">{match[2]}</span>
-                                  </div>
-                                );
+                      {section.content.split('\n\n').map((paragraph, idx) => {
+                        const lines = paragraph.split('\n');
+                        const isList = lines.every(line => line.startsWith('- ') || line.match(/^\d+\./));
+
+                        if (isList) {
+                          const isUnordered = lines[0].startsWith('- ');
+                          const listClasses = cn("mb-4 ml-6 space-y-2", isUnordered ? "list-disc" : "list-decimal");
+
+                          if (isUnordered) {
+                            return (
+                              <ul key={idx} className={listClasses}>
+                                {lines.map((line, lineIdx) => {
+                                  const content = line.replace(/^- /, '');
+                                  if (content.startsWith('**')) {
+                                    const match = content.match(/^\*\*(.+?)\*\*: (.+)/);
+                                    if (match) {
+                                      return <li key={lineIdx} className="text-muted-foreground"><Badge variant="secondary" className="mr-2">{match[1]}</Badge> {match[2]}</li>;
+                                    }
+                                  }
+                                  return <li key={lineIdx} className="text-muted-foreground">{content}</li>;
+                                })}
+                              </ul>
+                            );
+                          } else {
+                            return (
+                              <ol key={idx} className={listClasses}>
+                                {lines.map((line, lineIdx) => {
+                                  const content = line.replace(/^\d+\. /, '');
+                                  return <li key={lineIdx} className="text-muted-foreground">{content}</li>;
+                                })}
+                              </ol>
+                            );
+                          }
+                        }
+
+                        return (
+                          <div key={idx} className="mb-4">
+                            {lines.map((line, lineIdx) => {
+                              if (line.startsWith('**') && line.endsWith('**')) {
+                                return <h4 key={lineIdx} className="font-semibold text-foreground mt-4 mb-2">{line.replace(/\*\*/g, '')}</h4>;
                               }
-                            }
-                            if (line.startsWith('- ')) {
-                              return <li key={lineIdx} className="text-muted-foreground ml-4">{line.substring(2)}</li>;
-                            }
-                            if (line.match(/^\d+\./)) {
-                              return <li key={lineIdx} className="text-muted-foreground ml-4 list-decimal">{line.substring(line.indexOf('.') + 2)}</li>;
-                            }
-                            return <p key={lineIdx} className="text-muted-foreground">{line}</p>;
-                          })}
-                        </div>
-                      ))}
+                              return <p key={lineIdx} className="text-muted-foreground">{line}</p>;
+                            })}
+                          </div>
+                        );
+                      })}
                     </div>
                   </TabsContent>
                 ))}

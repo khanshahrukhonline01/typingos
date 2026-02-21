@@ -19,6 +19,7 @@ export const AdToEarn: React.FC<AdToEarnProps> = ({
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
+    const progressBarRef = React.useRef<HTMLDivElement>(null);
 
     const startAd = () => {
         setIsPlaying(true);
@@ -51,6 +52,13 @@ export const AdToEarn: React.FC<AdToEarnProps> = ({
         if (onComplete) onComplete();
     };
 
+    // Update progress bar width imperatively to avoid JSX style= prop
+    React.useEffect(() => {
+        if (progressBarRef.current) {
+            progressBarRef.current.style.width = `${progress}%`;
+        }
+    }, [progress]);
+
     return (
         <Card className="bg-[#1A1C1E]/60 border-white/5 overflow-hidden group hover:border-primary/20 transition-all duration-500">
             <CardContent className="p-0">
@@ -77,12 +85,10 @@ export const AdToEarn: React.FC<AdToEarnProps> = ({
                     <div className="relative h-24 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                         <div className="flex flex-col items-center gap-2 z-10">
                             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60 animate-pulse">Sponsored Video Playing...</span>
-                            <div className="w-64 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                <div
-                                    className="h-full bg-amber-500 transition-all duration-100 ease-linear shadow-[0_0_10px_rgba(245,158,11,0.5)]"
-                                    style={{ width: `${progress}%` }}
-                                />
-                            </div>
+                            <div
+                                ref={progressBarRef}
+                                className="h-full bg-amber-500 transition-all duration-100 ease-linear shadow-[0_0_10px_rgba(245,158,11,0.5)]"
+                            />
                             <span className="text-[10px] font-mono text-amber-500 font-bold">{Math.ceil((100 - progress) / 6.6)}s remaining</span>
                         </div>
 

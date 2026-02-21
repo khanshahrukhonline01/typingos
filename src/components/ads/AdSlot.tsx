@@ -79,8 +79,7 @@ export function AdSlot({
             >
                 {provider === 'google' && (
                     <ins
-                        className="adsbygoogle"
-                        style={{ display: 'block' }}
+                        className="adsbygoogle block"
                         data-ad-client="ca-pub-0000000000000000" // REPLACE WITH ACTUAL PUB ID
                         data-ad-slot={slotId}
                         data-ad-format={orientation === 'vertical' ? 'vertical' : format}

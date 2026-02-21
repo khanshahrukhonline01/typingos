@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { HandGesture } from "@/components/typing/HandGesture";
+import { useGamification } from "@/contexts/GamificationContext";
 import { keyboardLayouts, KeyboardLayout } from "@/data/keyboardLayouts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Globe } from "lucide-react";
@@ -65,6 +66,9 @@ export const VirtualKeyboard = ({
   layout = 'qwerty',
   onLayoutChange
 }: VirtualKeyboardProps) => {
+  const { userStats } = useGamification();
+  const equippedKeycap = userStats.equippedCosmetics?.keycap || 'default';
+
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [activeFinger, setActiveFinger] = useState<keyof typeof fingerColors | null>(null);
   const [currentLayout, setCurrentLayout] = useState<KeyboardLayout>(layout);
@@ -146,9 +150,27 @@ export const VirtualKeyboard = ({
     else if (isCurrentKey && showFingerGuide) {
       baseClass += "bg-amber-500/10 text-amber-600 border-amber-500 animate-pulse shadow-md z-10 ";
     }
-    // Default state
+    // Default state with Skins
     else {
-      baseClass += "bg-white dark:bg-[#25282C] text-foreground/40 border-black/5 dark:border-white/5 shadow-sm hover:border-black/10 dark:hover:border-white/10 ";
+      switch (equippedKeycap) {
+        case 'keycap_neon':
+          baseClass += "bg-black text-cyan-400 border-cyan-500/50 shadow-[0_0_10px_rgba(34,211,238,0.2)] font-mono ";
+          break;
+        case 'keycap_retro':
+          baseClass += "bg-[#d1d1d1] text-[#4a4a4a] border-[#a0a0a0] border-b-4 shadow-md font-serif ";
+          break;
+        case 'keycap_carbon':
+          baseClass += "bg-[#1c1c1c] text-white/70 border-white/10 shadow-inner opacity-90 ";
+          break;
+        case 'keycap_gold':
+          baseClass += "bg-gradient-to-br from-yellow-400 to-yellow-600 text-yellow-900 border-yellow-700 shadow-lg font-black ";
+          break;
+        case 'keycap_holographic':
+          baseClass += "bg-gradient-to-br from-pink-300 via-purple-300 to-cyan-300 text-purple-900 border-white/40 shadow-xl ";
+          break;
+        default:
+          baseClass += "bg-white dark:bg-[#25282C] text-foreground/40 border-black/5 dark:border-white/5 shadow-sm hover:border-black/10 dark:hover:border-white/10 ";
+      }
     }
 
     return baseClass;
@@ -234,7 +256,7 @@ export const VirtualKeyboard = ({
                   className={getKeyClass(key, rowIndex, keyIndex)}
                   tabIndex={-1}
                   aria-label={key === 'Space' ? 'Space' : key}
-                  aria-pressed={activeKey === key.toLowerCase() ? true : undefined}
+                  data-pressed={activeKey === key.toLowerCase() ? "true" : "false"}
                   aria-current={currentChar?.toLowerCase() === key.toLowerCase() || (key === 'Space' && currentChar === ' ') ? 'true' : undefined}
                 >
                   <span className="relative z-10" aria-hidden="true">

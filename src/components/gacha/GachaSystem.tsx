@@ -13,7 +13,9 @@ import { toast } from "sonner";
 import confetti from "canvas-confetti";
 
 import { useGamification } from "@/contexts/GamificationContext";
+import { useEconomy } from "@/contexts/EconomyContext";
 import { COSMETIC_ITEMS, RARITY_CONFIG, Cosmetic, CosmeticRarity, CosmeticType } from "@/data/cosmetics";
+import { Coins, Gem } from "lucide-react";
 
 
 interface GachaSystemProps {
@@ -25,35 +27,19 @@ export const GachaSystem: React.FC<GachaSystemProps> = ({
     isOpen,
     onClose
 }) => {
-    const { userStats, consumeCrate, unlockCosmetic } = useGamification();
-    const cratesAvailable = userStats.cratesAvailable;
+    const { equipCosmetic } = useGamification();
+    const { wallet, openCrate } = useEconomy();
     const { t } = useTranslation();
     const [phase, setPhase] = useState<"ready" | "shaking" | "opening" | "reveal">("ready");
     const [revealedItem, setRevealedItem] = useState<Cosmetic | null>(null);
+    const [crateType, setCrateType] = useState<'standard' | 'elite'>('standard');
 
-    // Roll for a random item based on rarity weights
-    const rollLoot = (): Cosmetic => {
-        const totalWeight = Object.values(RARITY_CONFIG).reduce((sum, r) => sum + r.weight, 0);
-        let roll = Math.random() * totalWeight;
+    const handleOpenCrate = (type: 'standard' | 'elite') => {
+        setCrateType(type);
 
-        let selectedRarity: CosmeticRarity = "common";
-        for (const [rarity, config] of Object.entries(RARITY_CONFIG)) {
-            roll -= config.weight;
-            if (roll <= 0) {
-                selectedRarity = rarity as CosmeticRarity;
-                break;
-            }
-        }
-
-        const rarityItems = COSMETIC_ITEMS.filter(item => item.rarity === selectedRarity);
-        return rarityItems[Math.floor(Math.random() * rarityItems.length)];
-    };
-
-    const handleOpenCrate = () => {
-        if (!consumeCrate()) {
-            toast.error(t("No crates available!"));
-            return;
-        }
+        // Open the crate in the economy logic first
+        const item = openCrate(type);
+        if (!item) return; // Error handled in openCrate (insufficient funds)
 
         // Phase 1: Shaking
         setPhase("shaking");
@@ -65,10 +51,8 @@ export const GachaSystem: React.FC<GachaSystemProps> = ({
 
         // Phase 3: Reveal (after 3s total)
         setTimeout(() => {
-            const item = rollLoot();
             setRevealedItem(item);
             setPhase("reveal");
-            unlockCosmetic(item.id);
 
             // Trigger confetti for epic/legendary
             if (item.rarity === "epic" || item.rarity === "legendary") {
@@ -147,29 +131,58 @@ export const GachaSystem: React.FC<GachaSystemProps> = ({
                                 {t("Open to reveal exclusive cosmetics!")}
                             </p>
 
-                            <div className="flex justify-center gap-4 text-sm">
-                                <Badge className="bg-gray-500/20 text-gray-400">60% Common</Badge>
-                                <Badge className="bg-blue-500/20 text-blue-400">25% Rare</Badge>
-                                <Badge className="bg-purple-500/20 text-purple-400">12% Epic</Badge>
-                                <Badge className="bg-yellow-500/20 text-yellow-400">3% Legendary</Badge>
+                            <div className="grid grid-cols-2 gap-4">
+                                {/* Standard Crate */}
+                                <Card
+                                    className={cn(
+                                        "p-6 cursor-pointer border-2 transition-all group overflow-hidden relative",
+                                        "hover:border-primary hover:bg-primary/5"
+                                    )}
+                                    onClick={() => handleOpenCrate('standard')}
+                                >
+                                    <div className="absolute top-0 right-0 p-2 bg-muted/20 rounded-bl-xl text-[10px] font-bold">LITE</div>
+                                    <Package className="w-10 h-10 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                                    <h3 className="font-black text-sm uppercase mb-2">Standard</h3>
+                                    <div className="flex items-center justify-center gap-1 text-yellow-400 font-black">
+                                        <Coins className="w-4 h-4" /> 500
+                                    </div>
+                                    <div className="mt-4 flex flex-wrap gap-1 justify-center">
+                                        <Badge variant="outline" className="text-[8px] px-1 opacity-50">70% C</Badge>
+                                        <Badge variant="outline" className="text-[8px] px-1 opacity-50">25% R</Badge>
+                                    </div>
+                                </Card>
+
+                                {/* Elite Crate */}
+                                <Card
+                                    className={cn(
+                                        "p-6 cursor-pointer border-2 transition-all group overflow-hidden relative border-purple-500/50",
+                                        "hover:border-purple-400 hover:bg-purple-500/10 shadow-lg shadow-purple-500/20"
+                                    )}
+                                    onClick={() => handleOpenCrate('elite')}
+                                >
+                                    <div className="absolute top-0 right-0 p-2 bg-purple-500 text-white rounded-bl-xl text-[10px] font-black">ELITE</div>
+                                    <Gift className="w-10 h-10 text-purple-400 mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                                    <h3 className="font-black text-sm uppercase mb-2">Elite</h3>
+                                    <div className="flex items-center justify-center gap-1 text-cyan-400 font-black">
+                                        <Gem className="w-4 h-4" /> 25
+                                    </div>
+                                    <div className="mt-4 flex flex-wrap gap-1 justify-center">
+                                        <Badge variant="outline" className="text-[8px] px-1 border-purple-500/50">20% E</Badge>
+                                        <Badge variant="outline" className="text-[8px] px-1 border-purple-500/50">10% L</Badge>
+                                    </div>
+                                </Card>
                             </div>
 
-                            <Card className="p-4 bg-secondary/20 border-primary/30">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-muted-foreground">{t("Crates Available")}</span>
-                                    <span className="text-2xl font-black text-primary">{cratesAvailable}</span>
+                            <div className="flex justify-between items-center px-4 py-2 bg-secondary/20 rounded-full border border-white/5">
+                                <div className="flex items-center gap-2">
+                                    <Coins className="w-4 h-4 text-yellow-400" />
+                                    <span className="font-bold">{wallet.coins}</span>
                                 </div>
-                            </Card>
-
-                            <Button
-                                size="lg"
-                                onClick={handleOpenCrate}
-                                disabled={cratesAvailable <= 0}
-                                className="bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90 text-lg px-12 py-6 font-black uppercase tracking-wider gap-2"
-                            >
-                                <Gift className="w-5 h-5" />
-                                {t("Open Crate")}
-                            </Button>
+                                <div className="flex items-center gap-2">
+                                    <Gem className="w-4 h-4 text-cyan-400" />
+                                    <span className="font-bold">{wallet.gems}</span>
+                                </div>
+                            </div>
                         </motion.div>
                     )}
 
@@ -302,19 +315,14 @@ export const GachaSystem: React.FC<GachaSystemProps> = ({
                                 transition={{ delay: 1 }}
                                 className="flex justify-center gap-4 pt-4"
                             >
-                                {cratesAvailable > 1 && (
-                                    <Button
-                                        size="lg"
-                                        onClick={() => {
-                                            setPhase("ready");
-                                            setRevealedItem(null);
-                                        }}
-                                        className="gap-2"
-                                    >
-                                        <Gift className="w-4 h-4" />
-                                        {t("Open Another")} ({cratesAvailable - 1})
-                                    </Button>
-                                )}
+                                <Button
+                                    size="lg"
+                                    onClick={() => handleOpenCrate(crateType)}
+                                    className="gap-2"
+                                >
+                                    <Gift className="w-4 h-4" />
+                                    {t("Open Another")}
+                                </Button>
                                 <Button
                                     size="lg"
                                     variant="outline"

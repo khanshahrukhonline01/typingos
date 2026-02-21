@@ -1,6 +1,7 @@
 import { useCallback, useRef } from "react";
+import { useGamification } from "@/contexts/GamificationContext";
 
-export type SoundType = "mechanical" | "typewriter" | "soft" | "none";
+export type SoundType = "mechanical" | "typewriter" | "soft" | "thocky" | "clicky" | "asmr" | "scifi" | "none";
 
 // Audio context for generating sounds
 let audioContext: AudioContext | null = null;
@@ -41,13 +42,53 @@ const soundConfigs = {
     type: "sine" as OscillatorType,
     clickFreq: 1500,
   },
+  thocky: {
+    frequency: 250,
+    duration: 0.12,
+    attack: 0.005,
+    decay: 0.1,
+    volume: 0.4,
+    type: "sine" as OscillatorType,
+    clickFreq: 600,
+  },
+  clicky: {
+    frequency: 1000,
+    duration: 0.06,
+    attack: 0.002,
+    decay: 0.04,
+    volume: 0.35,
+    type: "square" as OscillatorType,
+    clickFreq: 3000,
+  },
+  asmr: {
+    frequency: 400,
+    duration: 0.15,
+    attack: 0.02,
+    decay: 0.1,
+    volume: 0.2,
+    type: "triangle" as OscillatorType,
+    clickFreq: 800,
+  },
+  scifi: {
+    frequency: 1200,
+    duration: 0.1,
+    attack: 0.005,
+    decay: 0.08,
+    volume: 0.3,
+    type: "sawtooth" as OscillatorType,
+    clickFreq: 4000,
+  },
 };
 
 export const useKeyboardSounds = () => {
   const lastPlayTime = useRef(0);
   const minInterval = 30; // Minimum ms between sounds
 
-  const playSound = useCallback((soundType: SoundType, isCorrect: boolean = true) => {
+  const { userStats } = useGamification();
+  const equippedSound = (userStats.equippedCosmetics?.sound?.replace('sound_', '') || 'mechanical') as SoundType;
+
+  const playSound = useCallback((overriddenType?: SoundType, isCorrect: boolean = true) => {
+    const soundType = overriddenType || equippedSound;
     if (soundType === "none") return;
 
     const now = Date.now();
