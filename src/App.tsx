@@ -96,9 +96,15 @@ import { NotificationProvider } from "@/contexts/NotificationContext";
 const queryClient = new QueryClient();
 
 // Dynamic basename: works for both typingos.com (/) and github.io/typingos (/typingos)
-const basename = typeof window !== 'undefined' && window.location.hostname === 'khanshahrukhonline01.github.io'
+console.log("App initializing... hostname:", typeof window !== 'undefined' ? window.location.hostname : 'ssr');
+console.log("App initializing... pathname:", typeof window !== 'undefined' ? window.location.pathname : 'ssr');
+
+const basename = typeof window !== 'undefined' &&
+  (window.location.hostname.includes('github.io') || window.location.pathname.startsWith('/typingos'))
   ? '/typingos'
   : '/';
+
+console.log("App initializing... basename set to:", basename);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
