@@ -289,7 +289,7 @@ export const ReplayShareCard: React.FC<ReplayShareCardProps> = ({
                         {/* Branding */}
                         <div className="relative z-10 flex items-center justify-center gap-2 text-white/30 text-[10px] font-bold uppercase tracking-widest">
                             <Sparkles className="w-3 h-3" />
-                            typing-os.com
+                            typingos.com
                             <Sparkles className="w-3 h-3" />
                         </div>
                     </div>

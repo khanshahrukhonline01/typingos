@@ -20,6 +20,7 @@ export default function Earn() {
   const weeklyTasks = earnTasks.filter(t => t.type === "weekly");
   const specialTasks = earnTasks.filter(t => t.type === "special");
 
+
   return (
     <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-8">
       {/* Header */}

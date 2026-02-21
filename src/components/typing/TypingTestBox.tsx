@@ -254,6 +254,13 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
   const keyIntervalsRef = useRef<number[]>([]);
   const lastKeyTimeRef = useRef<number>(0);
 
+  const handleRestart = useCallback(() => {
+    setIsBotDetected(false);
+    keyIntervalsRef.current = [];
+    lastKeyTimeRef.current = 0;
+    restart();
+  }, [restart]);
+
   useEffect(() => {
     if (isStarted && !isFinished) {
       const threshold = targetWpm ? targetWpm * 1.1 : 60;
@@ -302,98 +309,101 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
     }
   }, [isStarted, isFinished, currentIndex, text.length]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isBotDetected) return; // Stop if bot detected
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (isBotDetected) return; // Stop if bot detected
 
-      if (e.key === "Escape" && isFocusMode) {
-        toggleFocusMode();
-        return;
-      }
-      if (e.key !== "Tab" && e.key !== "F5" && !e.ctrlKey && !e.metaKey && e.key !== "Escape") {
-        e.preventDefault();
-      }
-      if (e.key === "Tab") {
-        e.preventDefault();
-        restart();
-        return;
-      }
+    if (e.key === "Escape" && isFocusMode) {
+      toggleFocusMode();
+      return;
+    }
+    if (e.key !== "Tab" && e.key !== "F5" && !e.ctrlKey && !e.metaKey && e.key !== "Escape") {
+      e.preventDefault();
+    }
+    if (e.key === "Tab") {
+      e.preventDefault();
+      handleRestart();
+      return;
+    }
 
-      // INTEGRITY CHECK: Detect robotic typing (extremely consistent intervals)
-      const now = performance.now();
-      if (lastKeyTimeRef.current > 0) {
-        const interval = now - lastKeyTimeRef.current;
-        keyIntervalsRef.current.push(interval);
-        if (keyIntervalsRef.current.length > 30) {
-          keyIntervalsRef.current.shift();
-          // Calculate standard deviation of intervals
-          const avg = keyIntervalsRef.current.reduce((a, b) => a + b) / 30;
-          const variance = keyIntervalsRef.current.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / 30;
-          const stdDev = Math.sqrt(variance);
+    // INTEGRITY CHECK: Detect robotic typing (extremely consistent intervals)
+    const now = performance.now();
+    if (lastKeyTimeRef.current > 0) {
+      const interval = now - lastKeyTimeRef.current;
+      keyIntervalsRef.current.push(interval);
+      if (keyIntervalsRef.current.length > 30) {
+        keyIntervalsRef.current.shift();
+        // Calculate standard deviation of intervals
+        const avg = keyIntervalsRef.current.reduce((a, b) => a + b) / 30;
+        const variance = keyIntervalsRef.current.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / 30;
+        const stdDev = Math.sqrt(variance);
 
-          // Human typing varies; if stdDev is extremely low (< 5ms), it's likely a script
-          if (stdDev < 5 && stats.wpm > 100) {
-            console.warn("Robotic typing detected!");
-            setIsBotDetected(true);
-            toast.error(t("Security Alert: Robotic activity detected. Test invalidated."));
-            restart();
-          }
+        // Human typing varies; if stdDev is extremely low (< 5ms), it's likely a script
+        if (stdDev < 5 && stats.wpm > 100) {
+          console.warn("Robotic typing detected!");
+          setIsBotDetected(true);
+          toast.error(t("Security Alert: Robotic activity detected. Test invalidated."));
+          handleRestart();
         }
       }
-      lastKeyTimeRef.current = now;
+    }
+    lastKeyTimeRef.current = now;
 
-      // SPEED LIMIT CHECK
-      if (stats.wpm > 350) {
-        setIsBotDetected(true);
-        toast.error(t("Security Alert: Impossible speed detected. Test invalidated."));
-        restart();
-        return;
-      }
+    // SPEED LIMIT CHECK
+    // Higher threshold to prevent false positives for elite typists
+    if (stats.wpm > 450) {
+      setIsBotDetected(true);
+      toast.error(t("Security Alert: Impossible speed detected. Test invalidated."));
+      handleRestart();
+      return;
+    }
 
-      if (e.key.length === 1 || e.key === "Backspace" || e.key === " ") {
-        setLastPressedKey(e.key);
-        const expectedChar = text[currentIndex];
-        const isCorrect = e.key === expectedChar;
-        setLastKeyCorrect(e.key === "Backspace" ? true : isCorrect);
+    if (e.key.length === 1 || e.key === "Backspace" || e.key === " ") {
+      setLastPressedKey(e.key);
+      const expectedChar = text[currentIndex];
+      const isCorrect = e.key === expectedChar;
+      setLastKeyCorrect(e.key === "Backspace" ? true : isCorrect);
 
-        // DOPAMINE ENGINE: Combo & Reward Logic
-        if (e.key !== "Backspace") {
-          if (isCorrect) {
-            const newCombo = combo + 1;
-            setCombo(newCombo);
-            if (newCombo > maxCombo) setMaxCombo(newCombo);
-
-            // Reward 'Pops' every 10 combo or on perfect word completion (space)
-            if (newCombo % 20 === 0 || (e.key === " " && combo > 5)) {
-              const rect = containerRef.current?.getBoundingClientRect();
-              const newReward = {
-                id: Math.random().toString(36),
-                amount: newCombo % 50 === 0 ? "+5" : "+1",
-                type: 'xp' as const,
-                x: (charRect?.left || 0) - (rect?.left || 0),
-                y: (charRect?.top || 0) - (rect?.top || 0) - 20
-              };
-              setRewards(prev => [...prev, newReward]);
-              addSessionXP(newCombo % 50 === 0 ? 5 : 1);
-              setTimeout(() => setRewards(prev => prev.filter(r => r.id !== newReward.id)), 1000);
-            }
-          } else {
-            setCombo(0);
-          }
-        }
-      }
-      if (soundType !== "none" && (e.key.length === 1 || e.key === " ")) {
-        const expectedChar = text[currentIndex];
-        const isCorrect = e.key === expectedChar;
+      // DOPAMINE ENGINE: Combo & Reward Logic
+      if (e.key !== "Backspace") {
         if (isCorrect) {
-          playSound(soundType, true);
+          const newCombo = combo + 1;
+          setCombo(newCombo);
+          if (newCombo > maxCombo) setMaxCombo(newCombo);
+
+          // Reward 'Pops' every 10 combo or on perfect word completion (space)
+          if (newCombo % 20 === 0 || (e.key === " " && combo > 5)) {
+            const rect = containerRef.current?.getBoundingClientRect();
+            const charRect = currentCharElement?.getBoundingClientRect();
+
+            const newReward = {
+              id: Math.random().toString(36),
+              amount: newCombo % 50 === 0 ? "+5" : "+1",
+              type: 'xp' as const,
+              x: (charRect?.left || 0) - (rect?.left || 0),
+              y: (charRect?.top || 0) - (rect?.top || 0) - 20
+            };
+            setRewards(prev => [...prev, newReward]);
+            addSessionXP(newCombo % 50 === 0 ? 5 : 1);
+            setTimeout(() => setRewards(prev => prev.filter(r => r.id !== newReward.id)), 1000);
+          }
         } else {
-          playErrorSound(soundType);
+          setCombo(0);
         }
       }
-      handleKeyPress(e.key);
-    };
+    }
+    if (soundType !== "none" && (e.key.length === 1 || e.key === " ")) {
+      const expectedChar = text[currentIndex];
+      const isCorrect = e.key === expectedChar;
+      if (isCorrect) {
+        playSound(soundType, true);
+      } else {
+        playErrorSound(soundType);
+      }
+    }
+    handleKeyPress(e.key);
+  }, [isBotDetected, isFocusMode, toggleFocusMode, handleRestart, stats.wpm, stats.accuracy, t, text, currentIndex, combo, maxCombo, charElements, currentCharElement, addSessionXP, soundType, playSound, playErrorSound, handleKeyPress]);
 
+  useEffect(() => {
     const blockEvent = (e: Event) => {
       e.preventDefault();
       toast.warning(t("Security: Interaction blocked to maintain test integrity."));
@@ -410,7 +420,7 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
       containerRef.current?.removeEventListener("contextmenu", blockEvent);
       containerRef.current?.removeEventListener("drop", blockEvent);
     };
-  }, [handleKeyPress, restart, soundType, text, currentIndex, playSound, playErrorSound, isFocusMode, toggleFocusMode]);
+  }, [handleKeyDown, t]);
 
   useEffect(() => {
     containerRef.current?.focus();
@@ -691,10 +701,10 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
 
       {/* FINAL ACTIONS */}
       <div className="flex items-center justify-center gap-4 py-4 bg-secondary/20 border-t border-black/[0.03] dark:border-white/5">
-        <Button onClick={restart} className="h-12 px-8 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 rounded-xl font-bold gap-2 shadow-lg transition-all active:scale-95" aria-label="Start new test">
+        <Button onClick={handleRestart} className="h-12 px-8 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 rounded-xl font-bold gap-2 shadow-lg transition-all active:scale-95" aria-label="Start new test">
           <RefreshCw className="w-4 h-4" aria-hidden="true" /> {t('New Test')}
         </Button>
-        <Button onClick={restart} variant="outline" className="h-12 px-8 bg-white dark:bg-[#25282C] border-black/10 dark:border-white/10 text-foreground rounded-xl font-bold gap-2 shadow-sm hover:bg-secondary transition-all active:scale-95" aria-label="Restart current test">
+        <Button onClick={handleRestart} variant="outline" className="h-12 px-8 bg-white dark:bg-[#25282C] border-black/10 dark:border-white/10 text-foreground rounded-xl font-bold gap-2 shadow-sm hover:bg-secondary transition-all active:scale-95" aria-label="Restart current test">
           <RotateCcw className="w-4 h-4" aria-hidden="true" /> {t('Restart Test')}
         </Button>
       </div>
@@ -706,7 +716,7 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
       {isFinished && (
         <ResultsModal
           stats={stats}
-          onRestart={restart}
+          onRestart={handleRestart}
           examConfig={examConfig}
           passed={passed}
           language={selectedLanguage}

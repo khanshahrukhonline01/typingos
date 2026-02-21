@@ -3,69 +3,34 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#09090b" />
-  <link rel="manifest" href="./manifest.json" />
-  <title>TypingOS - Master Your Typing Speed</title>
-  <meta name="description"
-    content="The ultimate TypingOS for speed mastery. Practice typing tests for government exams (SSC, Railway, Banking), enjoy monospaced minimalist UI, and track your progress with AI insights." />
-  <meta name="keywords"
-    content="typing test, typing speed, ssc typing, railway typing exam, typing practice, touch typing, hindi typing, typing speed test online" />
-  <meta name="author" content="TypingOS" />
-
-  <!-- SECURITY: Unified Content Security Policy for Hybrid Monetization (AdSense + PropellerAds) -->
-  <!-- <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://*.propush.me https://*.propellerads.com https://*.iclickcdn.com https://*.onclickalgo.com https://*.google.com https://*.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: https://*.google.com https://*.googlesyndication.com https://*.propush.me https://*.propellerads.com; connect-src 'self' https://*.googleapis.com https://*.google.com https://*.propush.me https://*.propellerads.com https://api.openai.com https://api.anthropic.com; frame-src 'self' https://googleads.g.doubleclick.net https://*.onclickalgo.com https://*.iclickcdn.com https://*.google.com; frame-ancestors 'none';"> -->
-  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta name="referrer" content="no-referrer-when-downgrade">
-
-  <!-- HYBRID ADS INITIALIZATION -->
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000"
-    crossorigin="anonymous"></script>
-  <!-- PropellerAds Anti-Adblock Placeholder (Add your tag below) -->
-  <!-- <script src="//propush.me/ntfc.php?p=0000000"></script> -->
-
-  <meta property="og:title" content="TypingOS - Master Your Typing Speed" />
-  <meta property="og:description"
-    content="Master your typing with high-fidelity tests designed for competitive exams and professional speed." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://your-typing-os-domain.com" />
-  <meta property="og:image" content="https://your-typing-os-domain.com/og-image.png" />
-
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="TypingOS" />
-  <meta name="twitter:description" content="Level up your typing game with the world's most advanced Typing OS." />
-  <meta name="twitter:image" content="https://your-typing-os-domain.com/og-image.png" />
-
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "TypingOS",
-      "url": "https://your-typing-os-domain.com",
-      "description": "Premium typing practice platform for competitive exams and professional productivity.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://your-typing-os-domain.com/search?q={search_term_string}",
-        "query-input": "required name=search_term_string"
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TypingOS - Free Typing Speed Test Online</title>
+  <!-- GitHub Pages SPA redirect: converts /some/path to /?/some/path -->
+  <script>
+    (function (l) {
+      if (l.search[1] === '/') {
+        var decoded = l.search.slice(1).split('&').map(function (s) {
+          return s.replace(/~and~/g, '&')
+        }).join('?');
+        window.history.replaceState(null, null,
+          l.pathname.slice(0, -1) + decoded + l.hash
+        );
       }
-    }
+    }(window.location));
+    // Redirect: encode the path into a query string for index.html to decode
+    var segmentCount = 0;
+    var l = window.location;
+    l.replace(
+      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?/' +
+      l.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
+      (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+      l.hash
+    );
   </script>
-
-  <!-- Google Fonts - Noto Sans Devanagari for Hindi support -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
-
-  <!-- Google AdSense - Placeholder (Uncomment and replace ID when ready) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
-    crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
+  <p>Redirecting to TypingOS...</p>
 </body>
 
 </html>

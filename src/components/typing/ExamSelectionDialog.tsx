@@ -19,27 +19,42 @@ import {
     BookOpen,
     Star,
 } from "lucide-react";
-import { exams, categoryColors, Exam } from "@/data/examsData";
+import { globalExams, GlobalExam } from "@/data/globalExamsData";
 import { sscExamSets, ExamSet } from "@/data/examSetsData";
 import { Language } from "@/data/wordLists";
 import { ExamConfig } from "@/contexts/ExamContext";
 import { useTestHistoryContext } from "@/contexts/TestHistoryContext";
 import { getRecommendedDifficulty, getDifficultyMastery } from "@/utils/difficultyRecommendation";
+import { cn } from "@/utils/utils";
 
 interface ExamSelectionDialogProps {
     trigger?: React.ReactNode;
     onSelect: (config: ExamConfig) => void;
 }
 
+// Country list for the selection bar
+const COUNTRIES = [
+    { name: "India", code: "IN", flag: "🇮🇳" },
+    { name: "United States", code: "US", flag: "🇺🇸" },
+    { name: "United Kingdom", code: "GB", flag: "🇬🇧" },
+    { name: "Japan", code: "JP", flag: "🇯🇵" },
+    { name: "Germany", code: "DE", flag: "🇩🇪" },
+    { name: "France", code: "FR", flag: "🇫🇷" },
+    { name: "Brazil", code: "BR", flag: "🇧🇷" },
+    { name: "Australia", code: "AU", flag: "🇦🇺" },
+    { name: "Canada", code: "CA", flag: "🇨🇦" },
+];
+
 export const ExamSelectionDialog: React.FC<ExamSelectionDialogProps> = ({
     trigger,
     onSelect
 }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedExam, setSelectedExam] = useState<Exam | null>(null);
+    const [selectedExam, setSelectedExam] = useState<GlobalExam | null>(null);
     const [step, setStep] = useState<"exam" | "set">("exam");
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedLang, setSelectedLang] = useState<Language>("english");
+    const [selectedCountry, setSelectedCountry] = useState("India");
     const [selectedDifficulty, setSelectedDifficulty] = useState<"all" | "easy" | "medium" | "hard">("all");
     const { t } = useTranslation();
 
@@ -48,13 +63,24 @@ export const ExamSelectionDialog: React.FC<ExamSelectionDialogProps> = ({
     const recommendedDifficulty = getRecommendedDifficulty(getAverageWpm(), getAverageAccuracy());
     const masteryStatus = getDifficultyMastery(results);
 
-    const categories = Array.from(new Set(exams.map((e) => e.category)));
+    const filteredExams = globalExams.filter(e =>
+        e.country === selectedCountry &&
+        (e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            e.fullName.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
 
-    const handleExamSelect = (exam: Exam, lang: Language) => {
-        const sets = sscExamSets.filter(s => s.examId === exam.id && s.language === lang);
+    const categories = Array.from(new Set(filteredExams.map((e) => e.category)));
+
+    const handleExamSelect = (exam: GlobalExam, lang: string) => {
+        const mappedLang = lang === "native"
+            ? (exam.nativeLanguage?.toLowerCase() as Language || "hindi")
+            : (lang as Language);
+
+        const sets = sscExamSets.filter(s => s.examId === exam.id && s.language === mappedLang);
+
         if (sets.length > 0) {
             setSelectedExam(exam);
-            setSelectedLang(lang);
+            setSelectedLang(mappedLang);
             setStep("set");
             setSearchQuery("");
         } else {
@@ -62,9 +88,9 @@ export const ExamSelectionDialog: React.FC<ExamSelectionDialogProps> = ({
                 id: exam.id,
                 name: exam.name,
                 fullName: exam.fullName,
-                targetWpm: lang === "hindi" ? (exam.typingSpeed.hindi || 30) : (exam.typingSpeed.english || 30),
+                targetWpm: lang === "native" ? (exam.typingSpeed.native || 30) : (exam.typingSpeed.english || 30),
                 duration: exam.duration,
-                language: lang,
+                language: mappedLang,
                 isMockTest: false,
             };
             onSelect(config);
@@ -75,11 +101,15 @@ export const ExamSelectionDialog: React.FC<ExamSelectionDialogProps> = ({
     const handleSetSelect = (set?: ExamSet) => {
         if (!selectedExam) return;
 
+        const targetWpm = selectedLang === "hindi"
+            ? (selectedExam.typingSpeed.native || 30)
+            : (selectedExam.typingSpeed.english || 35);
+
         const config: ExamConfig = {
             id: selectedExam.id,
             name: selectedExam.name,
             fullName: selectedExam.fullName,
-            targetWpm: selectedLang === "hindi" ? (selectedExam.typingSpeed.hindi || 30) : (selectedExam.typingSpeed.english || 30),
+            targetWpm: targetWpm,
             duration: selectedExam.duration,
             language: selectedLang,
             isMockTest: false,
@@ -110,7 +140,7 @@ export const ExamSelectionDialog: React.FC<ExamSelectionDialogProps> = ({
                     </Button>
                 )}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[700px] h-[80vh] flex flex-col p-0 overflow-hidden bg-card border-white/10 shadow-2xl">
+            <DialogContent className="sm:max-w-[700px] h-[85vh] flex flex-col p-0 overflow-hidden bg-card border-white/10 shadow-2xl">
                 <DialogHeader className="p-6 pb-2 flex-shrink-0">
                     <DialogTitle className="text-2xl font-bold flex items-center gap-2">
                         {step === "exam" ? (
@@ -126,7 +156,8 @@ export const ExamSelectionDialog: React.FC<ExamSelectionDialogProps> = ({
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="px-6 mb-4 flex-shrink-0">
+                <div className="px-6 space-y-4 flex-shrink-0">
+                    {/* Search Bar */}
                     <div className="relative">
                         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
                         <Input
@@ -136,6 +167,29 @@ export const ExamSelectionDialog: React.FC<ExamSelectionDialogProps> = ({
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
+
+                    {/* Country Selector */}
+                    {step === "exam" && (
+                        <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar -mx-1 px-1">
+                            {COUNTRIES.map((country) => (
+                                <Button
+                                    key={country.code}
+                                    variant={selectedCountry === country.name ? "default" : "outline"}
+                                    size="sm"
+                                    onClick={() => setSelectedCountry(country.name)}
+                                    className={cn(
+                                        "h-9 px-3 gap-2 shrink-0 transition-all",
+                                        selectedCountry === country.name
+                                            ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105"
+                                            : "hover:bg-primary/10 hover:border-primary/30"
+                                    )}
+                                >
+                                    <span className="text-base">{country.flag}</span>
+                                    <span className="text-xs font-semibold">{country.name}</span>
+                                </Button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Difficulty Filter - Only show in set selection step */}
@@ -203,25 +257,21 @@ export const ExamSelectionDialog: React.FC<ExamSelectionDialogProps> = ({
                         <div className="h-full overflow-y-auto pr-2 custom-scrollbar">
                             <div className="space-y-6">
                                 {categories.map(category => {
-                                    const categoryExams = exams.filter(e =>
-                                        e.category === category &&
-                                        (e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                            e.fullName.toLowerCase().includes(searchQuery.toLowerCase()))
-                                    );
+                                    const categoryExams = filteredExams.filter(e => e.category === category);
 
                                     if (categoryExams.length === 0) return null;
                                     const localizedCategory = t(category as any);
 
                                     return (
                                         <div key={category} className="space-y-3">
-                                            <Badge variant="outline" className={categoryColors[category]}>{localizedCategory}</Badge>
+                                            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">{localizedCategory}</Badge>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                 {categoryExams.map(exam => (
                                                     <div key={exam.id} className="group p-4 rounded-xl border border-white/5 bg-secondary/20 hover:bg-secondary/40 transition-all cursor-pointer">
                                                         <div className="font-bold text-foreground mb-1">{exam.name}</div>
                                                         <div className="text-xs text-muted-foreground mb-3 line-clamp-1">{exam.fullName}</div>
 
-                                                        <div className="flex gap-2">
+                                                        <div className="flex gap-2 flex-wrap">
                                                             {exam.typingSpeed.english && (
                                                                 <Button
                                                                     size="sm"
@@ -232,14 +282,14 @@ export const ExamSelectionDialog: React.FC<ExamSelectionDialogProps> = ({
                                                                     English ({exam.typingSpeed.english} WPM)
                                                                 </Button>
                                                             )}
-                                                            {exam.typingSpeed.hindi && (
+                                                            {exam.typingSpeed.native && (
                                                                 <Button
                                                                     size="sm"
                                                                     variant="secondary"
                                                                     className="h-7 text-[10px] gap-1 px-2"
-                                                                    onClick={() => handleExamSelect(exam, "hindi")}
+                                                                    onClick={() => handleExamSelect(exam, "native")}
                                                                 >
-                                                                    Hindi ({exam.typingSpeed.hindi} WPM)
+                                                                    {exam.nativeLanguage || "Native"} ({exam.typingSpeed.native} WPM)
                                                                 </Button>
                                                             )}
                                                         </div>

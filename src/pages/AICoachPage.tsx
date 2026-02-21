@@ -11,6 +11,8 @@ import { useGamification } from "@/contexts/GamificationContext";
 import { useTestHistoryContext } from "@/contexts/TestHistoryContext";
 import { cn } from "@/utils/utils";
 import { AnalysisEngine, COACH_PROFILES, CoachPersona } from "@/services/ai/AnalysisEngine";
+import { aiService } from "@/services/ai/AIService";
+import { toast } from "sonner";
 
 // Mock heatmap data for visualization
 const HEATMAP_KEYS = [
@@ -42,44 +44,53 @@ export default function AICoachPage() {
     useEffect(() => {
         const lastResult = results[results.length - 1];
         if (lastResult) {
-            const analysis = AnalysisEngine.analyzePerformance(results, activePersona);
-            if (analysis.recommendation) {
-                setTimeout(() => {
+            const runAnalysis = async () => {
+                const analysis = await AnalysisEngine.generateAIAnalysis(results, activePersona);
+                if (analysis.recommendation) {
                     setChatMessages(prev => [
                         ...prev,
                         { role: 'ai', text: analysis.recommendation }
                     ]);
-                }, 1000);
-            }
+                }
+            };
+            runAnalysis();
         }
     }, [results, activePersona]);
 
-    const handleAnalyze = () => {
+    const handleAnalyze = async () => {
         setIsAnalyzing(true);
-        setTimeout(() => {
-            const analysis = AnalysisEngine.analyzePerformance(results, activePersona);
+        try {
+            const analysis = await AnalysisEngine.generateAIAnalysis(results, activePersona);
             setAnalysisResult(analysis);
+            setChatMessages(prev => [
+                ...prev,
+                { role: 'ai', text: `Analysis complete. ${analysis.recommendation} I suggest you try the "${analysis.suggestedLesson}" lesson.` }
+            ]);
+        } catch (error) {
+            toast.error("AI Analysis failed. Please check your API keys.");
+        } finally {
             setIsAnalyzing(false);
-            setChatMessages(prev => [...prev, { role: 'ai', text: `Analysis complete. ${analysis.recommendation} Try this lesson: ${analysis.suggestedLesson}` }]);
-        }, 1500);
+        }
     };
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (!userInput.trim()) return;
-        setChatMessages([...chatMessages, { role: 'user', text: userInput.trim() }]);
+        const text = userInput.trim();
+        setChatMessages(prev => [...prev, { role: 'user', text }]);
         setUserInput("");
 
-        // Mock simple response logic
-        setTimeout(() => {
-            let response = "";
-            switch (activePersona) {
-                case 'sensei': response = "Patience. The keys are an extension of your mind."; break;
-                case 'drill_sergeant': response = "LESS TALK, MORE TYPING! DROP AND GIVE ME 50 WPM!"; break;
-                case 'hype_beast': response = "Yo that's fire! Keep that energy up!"; break;
-                case 'analytical_bot': response = "Query acknowledged. Processing optimal response vector."; break;
-            }
+        try {
+            const response = await aiService.generateText({
+                modelId: '', // uses active
+                prompt: text,
+                systemPrompt: `You are ${profile.name}, a typing coach. Your style is ${profile.style}. 
+                The user has an average WPM of ${getAverageWpm()} and accuracy of ${getAverageAccuracy()}%.
+                Keep your response concise and in character.`
+            });
             setChatMessages(prev => [...prev, { role: 'ai', text: response }]);
-        }, 800);
+        } catch (error: any) {
+            setChatMessages(prev => [...prev, { role: 'ai', text: `Error: ${error.message}` }]);
+        }
     };
 
     return (

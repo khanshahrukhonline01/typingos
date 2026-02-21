@@ -1,4 +1,6 @@
 
+import { aiService } from './AIService';
+
 export type CoachPersona = 'sensei' | 'drill_sergeant' | 'hype_beast' | 'analytical_bot';
 
 interface CoachProfile {
@@ -49,11 +51,56 @@ export interface TypingAnalysis {
 }
 
 export class AnalysisEngine {
-    static analyzePerformance(history: any[], persona: CoachPersona): TypingAnalysis {
-        // Mock analysis logic
-        // In a real implementation, this would analyze the user's actual history data
+    static async generateAIAnalysis(history: any[], persona: CoachPersona): Promise<TypingAnalysis> {
+        if (history.length === 0) {
+            return this.analyzePerformance([], persona);
+        }
 
-        const weakKeys = ['q', 'z', 'p', '-']; // Mock weak keys
+        const statsSummary = history.slice(-10).map(h => ({
+            wpm: h.wpm,
+            accuracy: h.accuracy,
+            date: new Date(h.timestamp).toLocaleDateString()
+        }));
+
+        const coach = COACH_PROFILES[persona];
+        const systemPrompt = `You are ${coach.name}, a typing coach with a ${coach.style} personality. 
+        Analyze the user's recent performance and provide a brief recommendation.
+        Format your response as a JSON object with these keys: 
+        "recommendation" (string), "weakKeys" (array of characters), "speedTrend" ("increasing"|"decreasing"|"stable"), 
+        "accuracyTrend" ("improving"|"declining"|"stable"), "suggestedLesson" (string).`;
+
+        const userPrompt = `Analyze my last 10 sessions: ${JSON.stringify(statsSummary)}`;
+
+        try {
+            const response = await aiService.generateText({
+                modelId: '', // Use active provider
+                prompt: userPrompt,
+                systemPrompt: systemPrompt,
+                temperature: 0.5
+            });
+
+            // Attempt to parse JSON from AI response
+            const jsonMatch = response.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                const data = JSON.parse(jsonMatch[0]);
+                return {
+                    weakKeys: data.weakKeys || [],
+                    speedTrend: data.speedTrend || 'stable',
+                    accuracyTrend: data.accuracyTrend || 'stable',
+                    recommendation: data.recommendation || "Keep practicing!",
+                    suggestedLesson: data.suggestedLesson || "General Practice"
+                };
+            }
+            throw new Error("Could not parse AI response");
+        } catch (error) {
+            console.warn("AI Analysis failed, falling back to mock:", error);
+            return this.analyzePerformance(history, persona);
+        }
+    }
+
+    static analyzePerformance(history: any[], persona: CoachPersona): TypingAnalysis {
+        // Fallback mock analysis logic
+        const weakKeys = ['q', 'z', 'p', '-'];
         const speedTrend = 'increasing';
         const accuracyTrend = 'stable';
 
@@ -81,6 +128,47 @@ export class AnalysisEngine {
             recommendation,
             suggestedLesson: "Right Pinky Precision Drill"
         };
+    }
+
+    static async generateGroupAIAnalysis(users: any[], persona: CoachPersona): Promise<TypingAnalysis> {
+        if (users.length === 0) {
+            return this.analyzeGroupPerformance([], persona);
+        }
+
+        const coach = COACH_PROFILES[persona];
+        const systemPrompt = `You are ${coach.name}, an organization-level typing performance auditor. 
+        Your style is ${coach.style}.
+        Analyze the aggregated performance data of a group of typists and provide strategic recommendations.
+        Format your response as a JSON object with these keys: 
+        "recommendation" (string), "weakKeys" (array of characters), "speedTrend" ("increasing"|"decreasing"|"stable"), 
+        "accuracyTrend" ("improving"|"declining"|"stable"), "suggestedLesson" (string).`;
+
+        const userPrompt = `Analyze this group performance data: ${JSON.stringify(users.slice(0, 50))}`;
+
+        try {
+            const response = await aiService.generateText({
+                modelId: '', // active
+                prompt: userPrompt,
+                systemPrompt: systemPrompt,
+                temperature: 0.4
+            });
+
+            const jsonMatch = response.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                const data = JSON.parse(jsonMatch[0]);
+                return {
+                    weakKeys: data.weakKeys || [],
+                    speedTrend: data.speedTrend || 'stable',
+                    accuracyTrend: data.accuracyTrend || 'stable',
+                    recommendation: data.recommendation || "Maintain current training intensity.",
+                    suggestedLesson: data.suggestedLesson || "Team Speed Drill"
+                };
+            }
+            throw new Error("Could not parse AI response");
+        } catch (error) {
+            console.warn("Group AI Analysis failed, falling back to mock:", error);
+            return this.analyzeGroupPerformance(users, persona);
+        }
     }
 
     static analyzeGroupPerformance(users: any[], persona: CoachPersona): TypingAnalysis {
@@ -116,7 +204,6 @@ export class AnalysisEngine {
     }
 
     static generateLesson(weakKeys: string[]): string {
-        // Mock lesson generation
         return `Practice these words: ${weakKeys.map(k => `${k}zz ${k}pp ${k}--`).join(' ')}`;
     }
 }

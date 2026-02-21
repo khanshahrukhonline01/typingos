@@ -206,6 +206,9 @@ const generateEarnTasks = (): EarnTask[] => {
     { id: "accuracy-90", title: "Accuracy Star", description: "Get 90%+ accuracy", type: "daily", coinsReward: 20, xpReward: 15, requirement: "90%+ accuracy", progress: 0, target: 90, isCompleted: false },
     { id: "weekly-streak", title: "Weekly Streak", description: "Maintain a 7-day streak", type: "weekly", coinsReward: 100, xpReward: 75, requirement: "7-day streak", progress: 0, target: 7, isCompleted: false },
     { id: "complete-20-tests", title: "Test Marathon", description: "Complete 20 tests this week", type: "weekly", coinsReward: 150, xpReward: 100, requirement: "20 tests", progress: 0, target: 20, isCompleted: false },
+    { id: "early-adopter", title: "Early Adopter", description: "Be part of the TypingOS alpha phase", type: "special", coinsReward: 1000, xpReward: 500, requirement: "Join before v1.0", progress: 1, target: 1, isCompleted: false },
+    { id: "bug-hunter", title: "Bug Hunter", description: "Report your first system anomaly", type: "special", coinsReward: 500, xpReward: 250, requirement: "Valid bug report", progress: 0, target: 1, isCompleted: false },
+    { id: "top-contributor", title: "Top Contributor", description: "Contribute to TypingOS open source", type: "special", coinsReward: 2500, xpReward: 1000, requirement: "Merged PR", progress: 0, target: 1, isCompleted: false },
   ];
 };
 

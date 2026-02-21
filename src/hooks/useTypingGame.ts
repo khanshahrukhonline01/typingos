@@ -99,7 +99,7 @@ export const useTypingGame = (config: TypingGameConfig = {}) => {
   ): TypingStats => {
     const totalChars = correctChars + incorrectChars;
     const timeElapsed = startTime ? (Date.now() - startTime) / 1000 : 0;
-    const minutes = timeElapsed / 60;
+    const minutes = Math.max(0.1 / 60, timeElapsed / 60); // Use a 100ms floor for WPM calculation to prevent spikes
     const words = correctChars / 5;
     const wpm = minutes > 0 ? Math.round(words / minutes) : 0;
     const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 100;

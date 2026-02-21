@@ -94,7 +94,7 @@ const faqData = [
       },
       {
         q: "How do I contact support?",
-        a: "You can reach us at support@typing-os.com or through our Contact page. We also have active Discord and Reddit communities."
+        a: "You can reach us at support@typingos.com or through our Contact page. We also have active Discord and Reddit communities."
       },
       {
         q: "Can I suggest new features?",

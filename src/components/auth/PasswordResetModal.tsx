@@ -76,7 +76,7 @@ export function PasswordResetModal({ open, onOpenChange }: PasswordResetModalPro
                                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                         <Input
                                             id="reset-email"
-                                            placeholder="commander@typing-os.com"
+                                            placeholder="commander@typingos.com"
                                             type="email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}

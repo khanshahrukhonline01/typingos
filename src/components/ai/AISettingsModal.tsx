@@ -10,6 +10,7 @@ import { Bot, Save, CheckCircle2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { AIProviderId } from "@/services/ai/types";
+import { cn } from "@/utils/utils";
 
 interface AISettingsModalProps {
     open?: boolean;
@@ -30,25 +31,29 @@ export function AISettingsModal({ open, onOpenChange, children }: AISettingsModa
         xai: ""
     });
 
+    const [activeProvider, setActiveProvider] = useState<string>("openai");
     const [activeTab, setActiveTab] = useState<string>("openai");
 
     useEffect(() => {
         // Load existing keys (masked)
-        const providers = aiService.getAllProviders();
-        const loadedKeys: Record<string, string> = {};
-
-        // Note: We can't actually retrieve keys back from the service easily due to security implementation details 
-        // unless we exposed a method. For now, we will rely on checking if configured.
-        // Real implementation would probably load from localStorage directly here for display editing.
         const storedConfig = localStorage.getItem('ai-service-config');
         if (storedConfig) {
             const config = JSON.parse(storedConfig);
-            Object.keys(config).forEach(key => {
-                if (config[key]?.apiKey) {
-                    loadedKeys[key] = config[key].apiKey;
-                }
-            });
+            const loadedKeys: Record<string, string> = {};
+
+            if (config.providers) {
+                Object.keys(config.providers).forEach(key => {
+                    if (config.providers[key]?.apiKey) {
+                        loadedKeys[key] = config.providers[key].apiKey;
+                    }
+                });
+            }
+
             setKeys(prev => ({ ...prev, ...loadedKeys }));
+            if (config.activeProviderId) {
+                setActiveProvider(config.activeProviderId);
+                setActiveTab(config.activeProviderId);
+            }
         }
     }, [showOpen]);
 
@@ -67,6 +72,16 @@ export function AISettingsModal({ open, onOpenChange, children }: AISettingsModa
         }
     };
 
+    const handleActivate = (providerId: string) => {
+        try {
+            aiService.setActiveProvider(providerId as AIProviderId);
+            setActiveProvider(providerId);
+            toast.success(`${providerId.charAt(0).toUpperCase() + providerId.slice(1)} set as active provider!`);
+        } catch (error) {
+            toast.error("Please configure the provider's API key first");
+        }
+    };
+
     return (
         <Dialog open={showOpen} onOpenChange={setShowOpen}>
             <DialogTrigger asChild>
@@ -78,10 +93,21 @@ export function AISettingsModal({ open, onOpenChange, children }: AISettingsModa
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                        <Bot className="w-5 h-5 text-primary" />
-                        AI Model Settings
-                    </DialogTitle>
+                    <div className="flex items-center justify-between">
+                        <DialogTitle className="flex items-center gap-2">
+                            <Bot className="w-5 h-5 text-primary" />
+                            AI Model Settings
+                        </DialogTitle>
+                        {activeProvider && (
+                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20">
+                                <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                                </span>
+                                <span className="text-[10px] font-bold text-primary uppercase">Active: {activeProvider}</span>
+                            </div>
+                        )}
+                    </div>
                     <DialogDescription>
                         Configure your API keys to enable AI features. Your keys are stored locally in your browser.
                     </DialogDescription>
@@ -117,9 +143,19 @@ export function AISettingsModal({ open, onOpenChange, children }: AISettingsModa
                                             onChange={(e) => setKeys(prev => ({ ...prev, [providerId]: e.target.value }))}
                                             className="flex-1"
                                         />
-                                        <Button onClick={() => handleSave(providerId)} size="sm" className="gap-2">
+                                        <Button onClick={() => handleSave(providerId)} size="sm" className="gap-2 shrink-0">
                                             <Save className="w-4 h-4" />
                                             Save
+                                        </Button>
+                                        <Button
+                                            variant={activeProvider === providerId ? "secondary" : "outline"}
+                                            onClick={() => handleActivate(providerId)}
+                                            size="sm"
+                                            className="gap-2 shrink-0"
+                                            disabled={!keys[providerId]}
+                                        >
+                                            <CheckCircle2 className={cn("w-4 h-4", activeProvider === providerId && "text-primary")} />
+                                            {activeProvider === providerId ? "Active" : "Activate"}
                                         </Button>
                                     </div>
                                     <p className="text-[10px] text-muted-foreground">

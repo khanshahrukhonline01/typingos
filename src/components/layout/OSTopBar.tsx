@@ -574,7 +574,7 @@ export function OSTopBar() {
                       <Github className="w-4 h-4" />
                       <span>Star on GitHub</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer gap-2" onClick={() => window.open('mailto:feedback@typing-os.com', '_blank')}>
+                    <DropdownMenuItem className="cursor-pointer gap-2" onClick={() => window.open('mailto:feedback@typingos.com', '_blank')}>
                       <MessageSquare className="w-4 h-4 text-blue-500" />
                       <span>Send Feedback</span>
                     </DropdownMenuItem>

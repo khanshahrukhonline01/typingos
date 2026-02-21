@@ -136,7 +136,7 @@ export default function DeveloperPortal() {
                                     </CardHeader>
                                     <CardContent className="p-6 space-y-4">
                                         <div className="font-mono text-xs leading-relaxed">
-                                            <p className="text-emerald-400">$ curl -X GET https://api.typing-os.com/v1/user/stats \</p>
+                                            <p className="text-emerald-400">$ curl -X GET https://api.typingos.com/v1/user/stats \</p>
                                             <p className="text-emerald-400 ml-4">-H "Authorization: Bearer <span className="text-white">{apiKey}</span>"</p>
                                             <br />
                                             <p className="text-white opacity-40">{"{"}</p>

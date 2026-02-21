@@ -231,7 +231,7 @@ export const CertificateGenerator: React.FC<CertificateGeneratorProps> = ({
       }
 
       doc.setTextColor(100, 100, 100);
-      doc.text(`Verify this credential at typing-os.com/verify#${certId}`, width / 2, 253, { align: "center" });
+      doc.text(`Verify this credential at typingos.com/verify#${certId}`, width / 2, 253, { align: "center" });
 
       // Save the PDF
       const fileName = examName

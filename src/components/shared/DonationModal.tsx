@@ -9,10 +9,12 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Coffee, Copy, Check, QrCode, Smartphone, ExternalLink, Heart } from "lucide-react";
+import { Coffee, Copy, Check, QrCode, Smartphone, ExternalLink, Heart, Github, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "@/utils/utils";
+import { Badge } from "@/components/ui/badge";
+import { AdToEarn } from "@/components/shared/AdToEarn";
 
 interface DonationModalProps {
     open: boolean;
@@ -63,22 +65,57 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
 
                             <div className="grid gap-4">
                                 <Button
-                                    onClick={() => window.open('https://www.buymeacoffee.com', '_blank')}
-                                    className="h-16 bg-[#FFDD00] hover:bg-[#FFDD00]/90 text-black font-black uppercase tracking-widest rounded-2xl border-0 shadow-lg group"
+                                    onClick={() => window.open('https://buymeacoffee.com/khanshahru8?new=1', '_blank')}
+                                    className="h-14 bg-[#FFDD00] hover:bg-[#FFDD00]/90 text-black font-black uppercase tracking-widest rounded-2xl border-0 shadow-lg group"
                                 >
                                     <Coffee className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform" />
                                     {t('Buy Me a Coffee')}
                                     <ExternalLink className="w-3.5 h-3.5 ml-2 opacity-50" />
                                 </Button>
 
+                                <div className="grid grid-cols-2 gap-4">
+                                    <Button
+                                        onClick={() => setView('upi')}
+                                        variant="outline"
+                                        className="h-14 border-white/10 bg-white/5 hover:bg-white/10 font-black uppercase tracking-widest rounded-2xl group transition-all"
+                                    >
+                                        <Smartphone className="w-5 h-5 mr-3 text-primary group-hover:scale-110 transition-transform" />
+                                        {t('UPI')}
+                                    </Button>
+
+                                    <Button
+                                        onClick={() => window.open('https://paypal.me', '_blank')}
+                                        variant="outline"
+                                        className="h-14 border-white/10 bg-[#0070BA]/10 hover:bg-[#0070BA]/20 text-[#0070BA] font-black uppercase tracking-widest rounded-2xl group transition-all"
+                                    >
+                                        <div className="w-5 h-5 mr-3 flex items-center justify-center font-bold text-xs italic group-hover:scale-110 transition-transform">PP</div>
+                                        {t('PayPal')}
+                                    </Button>
+                                </div>
+
                                 <Button
-                                    onClick={() => setView('upi')}
+                                    onClick={() => window.open('https://github.com/sponsors', '_blank')}
                                     variant="outline"
-                                    className="h-16 border-white/10 bg-white/5 hover:bg-white/10 font-black uppercase tracking-widest rounded-2xl group transition-all"
+                                    className="h-14 border-white/10 bg-white/5 hover:bg-white/10 font-black uppercase tracking-widest rounded-2xl group transition-all"
                                 >
-                                    <Smartphone className="w-5 h-5 mr-3 text-primary group-hover:scale-110 transition-transform" />
-                                    {t('Donate via UPI')}
+                                    <Github className="w-5 h-5 mr-3 text-white group-hover:scale-110 transition-transform" />
+                                    {t('GitHub Sponsors')}
+                                    <Heart className="w-3.5 h-3.5 ml-2 text-pink-500 fill-pink-500" />
                                 </Button>
+
+                                <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10 group cursor-pointer hover:bg-primary/10 transition-all">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center gap-2">
+                                            <Zap className="w-4 h-4 text-primary fill-current" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-primary">{t('Non-Monetary Support')}</span>
+                                        </div>
+                                        <Badge className="bg-primary text-primary-foreground text-[8px] font-black px-1.5 h-4">+75 {t('Coins')}</Badge>
+                                    </div>
+                                    <p className="text-[10px] text-muted-foreground mb-3 font-mediumLeading-relaxed uppercase">
+                                        {t('Support TypingOS servers by watching a short transmission.')}
+                                    </p>
+                                    <AdToEarn rewardAmount={75} />
+                                </div>
                             </div>
 
                             <p className="text-center mt-8 text-[10px] text-muted-foreground uppercase font-black tracking-tighter opacity-50">

@@ -91,7 +91,7 @@ export default function PrivacyPolicy() {
               <h3 className="text-lg font-semibold text-foreground">6. Contact Us</h3>
               <p className="text-muted-foreground">
                 If you have any questions about this Privacy Policy, please contact us at
-                <span className="text-foreground font-medium ml-1">privacy@typing-os.com</span>.
+                <span className="text-foreground font-medium ml-1">privacy@typingos.com</span>.
               </p>
             </section>
           </CardContent>

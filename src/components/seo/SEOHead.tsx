@@ -2,6 +2,11 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
+interface FAQItem {
+    question: string;
+    answer: string;
+}
+
 interface SEOHeadProps {
     title?: string;
     description?: string;
@@ -12,20 +17,40 @@ interface SEOHeadProps {
     author?: string;
     publishedTime?: string;
     modifiedTime?: string;
+    faqs?: FAQItem[];
+    schema?: object;
 }
 
+const BASE_URL = 'https://typingos.com';
+
 export const SEOHead: React.FC<SEOHeadProps> = ({
-    title = "TypingOS - Master Your Typing Speed",
-    description = "The ultimate TypingOS for speed mastery. Practice typing tests for government exams (SSC, Railway, Banking), enjoy monospaced minimalist UI, and track your progress with AI insights.",
-    keywords = "typing test, typing speed, ssc typing, railway typing exam, typing practice, touch typing, hindi typing",
-    image = "https://typing-os.com/og-image.png",
-    url = typeof window !== 'undefined' ? window.location.href : "https://typing-os.com",
+    title = "Free Typing Speed Test Online | TypingOS",
+    description = "Take a free typing speed test online. Improve your WPM and accuracy with interactive lessons, real-time performance tracking, and AI-powered coaching. Practice for SSC, Railway, and Banking exams.",
+    keywords = "free typing speed test, typing test online, wpm calculator, words per minute test, typing practice online, ssc typing test, railway typing exam, touch typing, hindi typing test, improve typing speed",
+    image = `${BASE_URL}/og-image.png`,
+    url = typeof window !== 'undefined' ? `${BASE_URL}${window.location.pathname}` : BASE_URL,
     type = "website",
     author = "TypingOS",
     publishedTime,
-    modifiedTime
+    modifiedTime,
+    faqs,
+    schema,
 }) => {
     const siteTitle = title.includes("TypingOS") ? title : `${title} | TypingOS`;
+    const canonicalUrl = url.replace(/#.*$/, ''); // strip any hash just in case
+
+    const faqSchema = faqs && faqs.length > 0 ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.question,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.answer
+            }
+        }))
+    } : null;
 
     return (
         <Helmet>
@@ -35,17 +60,19 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
             <meta name="description" content={description} />
             <meta name="keywords" content={keywords} />
             <meta name="author" content={author} />
+            <meta name="robots" content="index, follow" />
 
             {/* Open Graph / Facebook */}
             <meta property="og:type" content={type} />
-            <meta property="og:url" content={url} />
+            <meta property="og:url" content={canonicalUrl} />
             <meta property="og:title" content={siteTitle} />
             <meta property="og:description" content={description} />
             <meta property="og:image" content={image} />
+            <meta property="og:site_name" content="TypingOS" />
 
             {/* Twitter */}
             <meta property="twitter:card" content="summary_large_image" />
-            <meta property="twitter:url" content={url} />
+            <meta property="twitter:url" content={canonicalUrl} />
             <meta property="twitter:title" content={siteTitle} />
             <meta property="twitter:description" content={description} />
             <meta property="twitter:image" content={image} />
@@ -54,8 +81,22 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
             {publishedTime && <meta property="article:published_time" content={publishedTime} />}
             {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
 
-            {/* Canonical Link */}
-            <link rel="canonical" href={url} />
+            {/* Canonical Link — always clean, no hash */}
+            <link rel="canonical" href={canonicalUrl} />
+
+            {/* Custom JSON-LD schema (e.g. WebApplication) */}
+            {schema && (
+                <script type="application/ld+json">
+                    {JSON.stringify(schema)}
+                </script>
+            )}
+
+            {/* FAQ Schema */}
+            {faqSchema && (
+                <script type="application/ld+json">
+                    {JSON.stringify(faqSchema)}
+                </script>
+            )}
         </Helmet>
     );
 };

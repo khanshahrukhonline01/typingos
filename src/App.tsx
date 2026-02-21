@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Suspense, lazy } from "react";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DashboardSkeleton } from "@/components/ui/LoadingSkeleton";
 import { ThemeProvider } from "next-themes";
 import { OSLayout } from "@/components/layout/OSLayout";
@@ -84,6 +84,9 @@ import ExamMissionControl from "@/pages/ExamMissionControl";
 import ForgeEditor from "@/components/forge/ForgeEditor";
 import Notifications from "@/pages/Notifications";
 import Profile from "@/pages/Profile";
+import TypingSpeedTestPage from "@/pages/TypingSpeedTestPage";
+import TypingPracticePage from "@/pages/TypingPracticePage";
+import WpmCalculatorPage from "@/pages/WpmCalculatorPage";
 // import ResetPassword from "@/pages/ResetPassword";
 
 import { SEOHead } from "@/components/seo/SEOHead";
@@ -114,7 +117,7 @@ const App = () => (
                           <Toaster />
                           <Sonner />
                           <DailyRewardModal />
-                          <HashRouter>
+                          <BrowserRouter>
                             <EconomyProvider>
                               <NotificationProvider>
                                 <OSLayout>
@@ -186,6 +189,10 @@ const App = () => (
                                       <Route path="/ai-coach" element={<AICoachPage />} />
                                       <Route path="/notifications" element={<Notifications />} />
                                       <Route path="/profile" element={<Profile />} />
+                                      {/* SEO Landing Pages */}
+                                      <Route path="/typing-speed-test" element={<TypingSpeedTestPage />} />
+                                      <Route path="/typing-practice-online" element={<TypingPracticePage />} />
+                                      <Route path="/wpm-calculator" element={<WpmCalculatorPage />} />
                                       {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
                                       <Route path="*" element={<NotFound />} />
                                     </Routes>
@@ -194,7 +201,7 @@ const App = () => (
                                 <CookieConsent />
                               </NotificationProvider>
                             </EconomyProvider>
-                          </HashRouter>
+                          </BrowserRouter>
                         </FocusWorkspaceProvider>
                       </BrandProvider>
                     </UniversePulseProvider>

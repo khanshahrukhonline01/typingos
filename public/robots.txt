@@ -2,7 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /node_modules/
 Disallow: /SETUP_STEPS.md
-Disallow: /storage_policies.sql
-Disallow: /supabase_migration.sql
 
-Sitemap: https://typinguniverse.com/sitemap.xml
+# Sitemap
+Sitemap: https://typingos.com/sitemap.xml

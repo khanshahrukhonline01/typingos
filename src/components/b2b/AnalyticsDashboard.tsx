@@ -35,11 +35,29 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ type }) 
     const primaryColor = isSchool ? "#3b82f6" : "#10b981"; // Blue for school, Emerald for business
     const secondaryColor = isSchool ? "#8b5cf6" : "#059669";
 
-    // Mock AI Analysis
+    // AI Analysis State
     const coachType: CoachPersona = isSchool ? 'sensei' : 'analytical_bot';
     const coachProfile = COACH_PROFILES[coachType];
-    const analysis = AnalysisEngine.analyzeGroupPerformance([], coachType); // Mock history
+    const [analysis, setAnalysis] = React.useState<any>(AnalysisEngine.analyzeGroupPerformance([], coachType));
+    const [isAnalyzing, setIsAnalyzing] = React.useState(false);
+
     const { history: neuralHistory } = useNeuralSync();
+
+    React.useEffect(() => {
+        const fetchAnalysis = async () => {
+            setIsAnalyzing(true);
+            try {
+                // In a real scenario, we'd pass aggregate data here
+                const result = await AnalysisEngine.generateGroupAIAnalysis([], coachType);
+                setAnalysis(result);
+            } catch (error) {
+                console.error("Dashboard AI Error:", error);
+            } finally {
+                setIsAnalyzing(false);
+            }
+        };
+        fetchAnalysis();
+    }, [coachType]);
 
     const KEYBOARD_LAYOUT = [
         ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -114,7 +132,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ type }) 
                             </div>
                             <div>
                                 <CardTitle className="text-lg">AI Performance Analysis</CardTitle>
-                                <p className="text-sm text-muted-foreground">Insights from {coachProfile.name}</p>
+                                <p className="text-sm text-muted-foreground">
+                                    {isAnalyzing ? "Syncing neural data..." : `Insights from ${coachProfile.name}`}
+                                </p>
                             </div>
                         </div>
                         <div className="text-4xl">{coachProfile.avatar}</div>

@@ -36,12 +36,21 @@ class AIService {
             const storedConfig = localStorage.getItem('ai-service-config');
             if (storedConfig) {
                 const config = JSON.parse(storedConfig);
-                Object.entries(config).forEach(([providerId, providerConfig]) => {
-                    const provider = this.providers.get(providerId as AIProviderId);
-                    if (provider) {
-                        provider.configure(providerConfig as AIProviderConfig);
-                    }
-                });
+
+                // Load provider configs
+                if (config.providers) {
+                    Object.entries(config.providers).forEach(([providerId, providerConfig]) => {
+                        const provider = this.providers.get(providerId as AIProviderId);
+                        if (provider) {
+                            provider.configure(providerConfig as AIProviderConfig);
+                        }
+                    });
+                }
+
+                // Load active provider
+                if (config.activeProviderId && this.providers.has(config.activeProviderId)) {
+                    this.activeProviderId = config.activeProviderId;
+                }
             }
         } catch (error) {
             console.error('Failed to load AI config:', error);
@@ -54,10 +63,31 @@ class AIService {
             provider.configure(config);
 
             // Persist to local storage
-            const currentConfig = JSON.parse(localStorage.getItem('ai-service-config') || '{}');
-            currentConfig[providerId] = config;
+            const rawConfig = localStorage.getItem('ai-service-config');
+            const currentConfig = rawConfig ? JSON.parse(rawConfig) : { providers: {}, activeProviderId: 'openai' };
+
+            if (!currentConfig.providers) currentConfig.providers = {};
+            currentConfig.providers[providerId] = config;
+
             localStorage.setItem('ai-service-config', JSON.stringify(currentConfig));
         }
+    }
+
+    public setActiveProvider(id: AIProviderId) {
+        if (!this.providers.has(id)) {
+            throw new Error(`Provider ${id} not found`);
+        }
+        this.activeProviderId = id;
+
+        // Persist active provider change
+        const rawConfig = localStorage.getItem('ai-service-config');
+        const currentConfig = rawConfig ? JSON.parse(rawConfig) : { providers: {}, activeProviderId: id };
+        currentConfig.activeProviderId = id;
+        localStorage.setItem('ai-service-config', JSON.stringify(currentConfig));
+    }
+
+    public getActiveProviderId(): AIProviderId {
+        return this.activeProviderId;
     }
 
     public getProvider(id: AIProviderId): AIProvider | undefined {
@@ -84,12 +114,20 @@ class AIService {
     }
 
     public async generateText(request: AICompletionRequest): Promise<string> {
-        // Direct browser calls for database-free system
-        // User must provide their own API keys in System Settings
         try {
-            const provider = this.providers.get(this.activeProviderId);
+            // If request specifies a model, try to use its provider
+            let providerId = this.activeProviderId;
+            if (request.modelId && request.modelId.includes(':')) {
+                const requestedProviderId = request.modelId.split(':')[0] as AIProviderId;
+                // Map internal IDs if necessary (e.g. google vs gemini)
+                if (this.providers.has(requestedProviderId)) {
+                    providerId = requestedProviderId;
+                }
+            }
+
+            const provider = this.providers.get(providerId);
             if (!provider || !provider.isConfigured()) {
-                throw new Error(`AI Provider ${this.activeProviderId} is not configured with an API key.`);
+                throw new Error(`AI Provider ${providerId} is not configured with an API key.`);
             }
 
             return await provider.generateText(request);

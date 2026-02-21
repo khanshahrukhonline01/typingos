@@ -77,7 +77,7 @@ export default function Accessibility() {
                                 We welcome your feedback on the accessibility of TypingOS. Please let us know if you encounter accessibility barriers:
                             </p>
                             <ul className="text-sm space-y-2 font-medium">
-                                <li>E-mail: accessibility@typing-os.com</li>
+                                <li>E-mail: accessibility@typingos.com</li>
                                 <li>Twitter: @TypingOS_A11y</li>
                             </ul>
                         </CardContent>
