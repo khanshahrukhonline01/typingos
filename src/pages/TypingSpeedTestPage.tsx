@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { TypingTestBox } from "@/components/typing/TypingTestBox";
 
 const faqs = [
     {
@@ -67,7 +68,7 @@ export default function TypingSpeedTestPage() {
                             Measure your typing speed in Words Per Minute (WPM) and accuracy instantly — no sign-up required.
                             Used by 100,000+ typists for exam prep, productivity, and personal improvement.
                         </p>
-                        <div className="flex flex-wrap justify-center gap-4 mt-6">
+                        <div className="flex flex-wrap justify-center gap-4 mt-6 mb-12">
                             <Link
                                 to="/"
                                 className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-colors"
@@ -80,6 +81,11 @@ export default function TypingSpeedTestPage() {
                             >
                                 📊 WPM Calculator
                             </Link>
+                        </div>
+
+                        {/* Interactive Typing Test Widget */}
+                        <div className="max-w-4xl mx-auto mb-16">
+                            <TypingTestBox />
                         </div>
                     </div>
 

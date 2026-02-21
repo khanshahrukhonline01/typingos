@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { cn } from "@/utils/utils";
@@ -309,6 +309,10 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
     }
   }, [isStarted, isFinished, currentIndex, text.length]);
 
+  // Render Smart Caret - Move up to fix lint and use in callbacks
+  const charElements = typeof document !== 'undefined' ? document.querySelectorAll('.char-pending, .char-correct, .char-incorrect, .char-current') : [];
+  const currentCharElement = (charElements[currentIndex] as HTMLElement) || null;
+
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (isBotDetected) return; // Stop if bot detected
 
@@ -401,7 +405,7 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
       }
     }
     handleKeyPress(e.key);
-  }, [isBotDetected, isFocusMode, toggleFocusMode, handleRestart, stats.wpm, stats.accuracy, t, text, currentIndex, combo, maxCombo, charElements, currentCharElement, addSessionXP, soundType, playSound, playErrorSound, handleKeyPress]);
+  }, [isBotDetected, isFocusMode, toggleFocusMode, handleRestart, stats.wpm, stats.accuracy, t, text, currentIndex, combo, maxCombo, currentIndex, addSessionXP, soundType, playSound, playErrorSound, handleKeyPress]);
 
   useEffect(() => {
     const blockEvent = (e: Event) => {
@@ -435,9 +439,7 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
   const isIndic = selectedLanguage !== "english";
   const passed = targetWpm ? stats.wpm >= targetWpm && stats.accuracy >= 85 : null;
 
-  // Render Smart Caret
-  const charElements = document.querySelectorAll('.char-pending, .char-correct, .char-incorrect, .char-current');
-  const currentCharElement = charElements[currentIndex] as HTMLElement;
+  // Render Smart Caret - Already declared above
 
   // Calculate relative position for the caret
   const containerRect = containerRef.current?.getBoundingClientRect();
