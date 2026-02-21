@@ -95,6 +95,11 @@ import { NotificationProvider } from "@/contexts/NotificationContext";
 
 const queryClient = new QueryClient();
 
+// Dynamic basename: works for both typingos.com (/) and github.io/typingos (/typingos)
+const basename = typeof window !== 'undefined' && window.location.hostname === 'khanshahrukhonline01.github.io'
+  ? '/typingos'
+  : '/';
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <SEOHead />
@@ -117,7 +122,7 @@ const App = () => (
                           <Toaster />
                           <Sonner />
                           <DailyRewardModal />
-                          <BrowserRouter>
+                          <BrowserRouter basename={basename}>
                             <EconomyProvider>
                               <NotificationProvider>
                                 <OSLayout>
