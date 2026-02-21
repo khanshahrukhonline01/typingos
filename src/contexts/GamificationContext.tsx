@@ -369,7 +369,7 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     loadAllData();
   }, []);
 
-  // Removed Sync with Supabase Auth & Profile (Loginless transition)
+  // Removed Sync with Cloud Auth & Profile (Loginless transition)
 
   // Save updates to Persistence Layer (Cloud sync removed)
   useEffect(() => {
@@ -616,7 +616,7 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   }, []);
 
   const consumeCrate = useCallback(() => {
-    let success = false;
+    const success = false;
     // We can't return value easily from setState updater, so we check state first
     // Note: This isn't perfectly atomic but sufficient for this app
     if (userStats.cratesAvailable > 0) {

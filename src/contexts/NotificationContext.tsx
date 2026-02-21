@@ -60,7 +60,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
     useEffect(() => {
         fetchNotifications();
-        // Supabase real-time subscription removed for loginless architecture
+        // Cloud real-time subscription removed for loginless architecture
     }, [fetchNotifications]);
 
     const unreadCount = notifications.filter((n) => !n.read).length;

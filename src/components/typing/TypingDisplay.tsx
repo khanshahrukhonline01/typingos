@@ -60,7 +60,7 @@ export const TypingDisplay: React.FC<TypingDisplayProps> = ({
       <QuantumParticles x={coords.x} y={coords.y} trigger={particleTrigger} />
       {text.split("").map((char, index) => {
         let className = "char-pending transition-colors duration-100";
-        let isCurrent = index === currentIndex;
+        const isCurrent = index === currentIndex;
 
         if (index < userInput.length) {
           if (userInput[index] === char) {

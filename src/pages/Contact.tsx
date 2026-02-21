@@ -47,7 +47,7 @@ export default function Contact() {
     {
       title: "Support Hub",
       desc: "For technical bugs, account recovery, or general help.",
-      email: "support@typingos.com",
+      email: "support@typing-os.com",
       icon: Headphones,
       color: "text-blue-500",
       bg: "bg-blue-500/10"
@@ -55,7 +55,7 @@ export default function Contact() {
     {
       title: "Partnerships",
       desc: "Media inquiries, brand collabs, or enterprise integration.",
-      email: "legal@typingos.com",
+      email: "legal@typing-os.com",
       icon: Heart,
       color: "text-pink-500",
       bg: "bg-pink-500/10"
@@ -63,7 +63,7 @@ export default function Contact() {
     {
       title: "Legal & Privacy",
       desc: "Queries regarding cookies, data, or terms of service.",
-      email: "privacy@typingos.com",
+      email: "privacy@typing-os.com",
       icon: ShieldCheck,
       color: "text-emerald-500",
       bg: "bg-emerald-500/10"

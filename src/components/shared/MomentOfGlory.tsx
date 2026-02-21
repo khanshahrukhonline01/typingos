@@ -188,7 +188,7 @@ export const MomentOfGlory: React.FC<MomentOfGloryProps> = ({ stats, keystrokes,
                         </div>
 
                         <p className="text-[9px] text-center text-muted-foreground font-medium uppercase tracking-widest mt-4">
-                            Verified by TypingOS Career Insights • typingos.com
+                            Verified by TypingOS Career Insights • typing-os.com
                         </p>
                     </CardContent>
                 </Card>

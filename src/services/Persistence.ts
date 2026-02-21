@@ -3,7 +3,7 @@
 /**
  * PersistenceService
  * Abstraction layer for data storage.
- * Supports Hybrid persistence: local storage + Supabase cloud fallback.
+ * Supports Hybrid persistence: local storage + Cloud cloud fallback.
  */
 class PersistenceService {
     async save(key: string, data: any): Promise<void> {
@@ -26,7 +26,7 @@ class PersistenceService {
         }
     }
 
-    // syncToSupabase removed for loginless architecture
+    // syncToCloud removed for loginless architecture
 
     async clear(key: string): Promise<void> {
         localStorage.removeItem(key);

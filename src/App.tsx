@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { DashboardSkeleton } from "@/components/ui/LoadingSkeleton";
 import { ThemeProvider } from "next-themes";
 import { OSLayout } from "@/components/layout/OSLayout";
@@ -114,7 +114,7 @@ const App = () => (
                           <Toaster />
                           <Sonner />
                           <DailyRewardModal />
-                          <BrowserRouter basename="/typingos">
+                          <HashRouter>
                             <EconomyProvider>
                               <NotificationProvider>
                                 <OSLayout>
@@ -194,7 +194,7 @@ const App = () => (
                                 <CookieConsent />
                               </NotificationProvider>
                             </EconomyProvider>
-                          </BrowserRouter>
+                          </HashRouter>
                         </FocusWorkspaceProvider>
                       </BrandProvider>
                     </UniversePulseProvider>

@@ -37,8 +37,8 @@ export function AdSlot({
     useEffect(() => {
         if (provider === 'google') {
             try {
-                // @ts-ignore
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
+                (window as any).adsbygoogle = (window as any).adsbygoogle || [];
+                (window as any).adsbygoogle.push({});
             } catch (e) {
                 console.error('AdSense Error:', e);
             }

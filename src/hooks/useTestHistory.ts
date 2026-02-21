@@ -45,7 +45,7 @@ export const useTestHistory = () => {
       timestamp: Date.now(),
     };
 
-    // Supabase cloud save removed - local persistence only
+    // Cloud cloud save removed - local persistence only
 
     setResults((prev) => {
       const updated = [newResult, ...prev].slice(0, MAX_RESULTS);

@@ -23,7 +23,7 @@ export const ViralShareCard: React.FC<ViralShareCardProps> = ({ wpm, accuracy, r
             id: Math.random().toString(36).substring(7) // In prod, this would be a DB record ID
         });
 
-        const shareLink = `https://typingos.com/share?${shareParams.toString()}`;
+        const shareLink = `https://typing-os.com/share?${shareParams.toString()}`;
 
         if (navigator.share) {
             try {
@@ -104,7 +104,7 @@ export const ViralShareCard: React.FC<ViralShareCardProps> = ({ wpm, accuracy, r
 
                     {/* Footer */}
                     <div className="pt-6 border-t border-white/10 text-center">
-                        <p className="text-xs font-medium text-white/40">@{username} • typingos.com</p>
+                        <p className="text-xs font-medium text-white/40">@{username} • typing-os.com</p>
                     </div>
                 </div>
             </div>

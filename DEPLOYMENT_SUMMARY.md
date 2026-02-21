@@ -1,31 +1,25 @@
-# TypingOS - Deployment Guide (Database-Free)
+# Universal Deployment Guide (Server-Agnostic)
 
-Since TypingOS is now a **serverless and database-free** application, deployment is extremely simple. You only need to host the static files.
+Your project is now **Server-Agnostic**. This means you can upload it to any web server, root domain, or subfolder without making any configuration changes.
 
-## Option 1: GitHub Pages (Recommended)
-You already have a deployment workflow configured in `.github/workflows/deploy.yml`.
+### 📦 How to Deploy Anywhere (Hostinger, GitHub, Vercel, etc.)
 
-### How to Activate:
-1.  **Repository Name**: Ensure your GitHub repository is named `typingos`.
-2.  **Upload Files**: Use the "Upload files" method mentioned earlier to push your code to the `main` branch.
-3.  **Automatic Build**: GitHub Actions will automatically start a "Build and Deploy" job.
-4.  **Enable Pages**:
-    - Go to **Settings** → **Pages**.
-    - Under "Build and deployment", set Source to **GitHub Actions**.
-5.  **Live Site**: Your app will be live at `https://<your-username>.github.io/typingos/`.
+1.  **Build the Project**:
+    - Open your terminal in `d:\Typingweb_V2`.
+    - Run: `npm run build`.
+    - This creates a **`dist`** folder.
 
-## Option 2: Vercel (Fastest Setup)
-1.  Go to [Vercel.com](https://vercel.com) and sign up with GitHub.
-2.  Click **Add New** → **Project**.
-3.  Import your `typingos` repository.
-4.  Vercel will detect it's a Vite project. Click **Deploy**.
-5.  It will give you a custom URL (e.g., `typingos.vercel.app`).
+2.  **Upload the Files**:
+    - **Upload everything** inside the `dist` folder to your server (e.g., `public_html` on Hostinger).
+    - It does not matter if it's in the root folder or a subfolder (like `/typingweb/`). It will work automatically.
 
-## Option 3: Netlify
-1.  Go to [Netlify.com](https://netlify.com).
-2.  Select **Import from GitHub**.
-3.  Connect your repo and click **Deploy**.
+3.  **Why this works**:
+    - **Relative Assets**: Every image and script uses `./` so they always find their way home.
+    - **Hash Routing**: I've switched the app to use `HashRouter`. This means the URL will look like `domain.com/#/profile`. This is the most compatible way to browse because it works on **any** server without needing special "rewrite" or ".htaccess" rules.
 
 ---
-> [!TIP]
-> **No Backend Required**: You don't need to set up any databases (Supabase, Firebase, etc.) anymore. Everything works locally in the browser.
+
+### ✅ Summary of the Move
+- ✅ **Database-Free**: 100% local persistence.
+- ✅ **Server-Agnostic**: Plug-and-play on any hosting provider.
+- ✅ **Restored & Verified**: All missing files recovered and build is successful.

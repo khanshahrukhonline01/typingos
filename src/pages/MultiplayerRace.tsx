@@ -155,7 +155,7 @@ const MultiplayerRace = () => {
   // Placeholder for channel state (assuming it will be added for multiplayer)
   const [channel, setChannel] = useState<any>(null);
 
-  // Supabase real-time channel logic removed for database-free system
+  // Cloud real-time channel logic removed for database-free system
   useEffect(() => {
     if (!roomCode) return;
 

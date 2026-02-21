@@ -259,7 +259,7 @@ export const generateText = (
     words.push(word);
   }
 
-  let result = words.join(" ");
+  const result = words.join(" ");
 
   if (mode === "sentences" || mode === "paragraphs") {
     const sentences = result.split(" ");
