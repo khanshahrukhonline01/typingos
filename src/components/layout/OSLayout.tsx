@@ -99,16 +99,17 @@ function OSLayoutInner({ children }: OSLayoutProps) {
         </>
       )}
 
-      {/* MAIN CANVAS */}
+      {/* MAIN CANVAS - With proper padding to prevent overlap */}
       <main
         className={cn(
-          "min-h-screen transition-all duration-500",
+          "min-h-screen transition-all duration-500 relative",
           // Top padding for fixed header (reduced in focus mode)
-          isFocusMode ? "pt-4" : "pt-20 lg:pt-24", // Reduced for mobile
+          isFocusMode ? "pt-4" : "pt-20 lg:pt-24",
           // Bottom padding for mobile dock
-          isFocusMode ? "pb-4" : "pb-24 lg:pb-0", // Increased for mobile to avoid dock overlap
-          // Side padding for Right Panel
-          isOSShellContext && !isFocusMode && "xl:pr-80",
+          isFocusMode ? "pb-4" : "pb-24 lg:pb-0",
+          // Right padding for desktop right panel (xl breakpoint and above)
+          // This prevents content from being hidden behind the fixed right panel
+          isOSShellContext && !hidePanels && "xl:pr-80",
           // Center content more in focus mode
           isFocusMode && "flex items-center justify-center"
         )}
@@ -125,6 +126,7 @@ function OSLayoutInner({ children }: OSLayoutProps) {
       </main>
 
       {/* RIGHT AI PANEL - Desktop only, hidden in focus mode */}
+      {/* Panel is absolutely positioned, main content gets padding via pr-80 above */}
       {isOSShellContext && !hidePanels && <OSRightPanel />}
 
       {/* MICRO HUD - Shows during typing, minimal in focus mode */}
