@@ -1,38 +1,38 @@
-# TypingOS - Advanced Typing Exercise Platform
+# TypingOS
 
-TypingOS is a high-fidelity, monospaced typing application designed for professional speed mastery and government exam preparation (SSC, Railway, Banking, etc.). 
+**Advanced Typing Exercise Platform** — Serverless · Private · Exam-Ready
 
-### 🌟 Key Features
-- **Serverless & Private**: 100% database-free architecture. Your data never leaves your browser.
-- **Universal Compatibility**: Optimized to run on any web server, root domain, or subfolder.
-- **Monospaced Excellence**: Minimalist, distraction-free UI with customizable themes (Cyberpunk, Midnight, etc.).
-- **Exam-Ready**: Specialized practice modes for competitive typing examinations.
+TypingOS is a high-fidelity, monospaced typing application for professional speed mastery and government exam preparation (SSC, Railway, Banking, etc.). All data stays in your browser — no accounts, no database.
 
 ---
 
-### 🚀 Getting Started
+## Features
 
-#### Local Development
-```bash
-# Install dependencies
+| Feature | Description |
+|---|---|
+| Serverless and Private | 100% database-free. Data never leaves your browser. |
+| Universal Compatibility | Runs on any host, root domain, or subfolder. |
+| Themed UI | Cyberpunk, Midnight and more themes. |
+| Exam-Ready | Specialized modes for SSC, Railway and Banking exams. |
+| AI Co-Pilot | Real-time coaching and performance predictions. |
+| Gamified | XP, Quests, Ghost Racer, and Galactic Events. |
+
+## Getting Started
+
+### Local Development
+\```bash
 npm install
-
-# Start development server
 npm run dev
-```
+\```
 
-#### Production Deployment
-1. **Build**: Run `npm run build`.
-2. **Deploy**: Upload the contents of the `dist/` folder to your hosting provider (Hostinger, GitHub Pages, Vercel, etc.).
+### Production Deployment
+1. Build: `npm run build`
+2. Deploy: Upload the `dist/` folder to your hosting provider
 
----
+Uses HashRouter + Relative Asset Paths — works on any server without .htaccess.
 
-### 🏁 Universal Support
-This project uses **HashRouter** and **Relative Asset Paths**, making it portable across any hosting environment without additional server configuration (no `.htaccess` required).
+## Privacy
 
----
-
-### 🛡️ Privacy
-Data is persisted locally via browser `localStorage`. No accounts or external database connections are required.
+All data is persisted in browser localStorage. No external API calls or database connections required.
 
 *Version: 2.1.0-Production*
