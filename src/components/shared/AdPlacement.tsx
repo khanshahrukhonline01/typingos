@@ -54,7 +54,7 @@ export const AdPlacement: React.FC<AdPlacementProps> = ({
         <Card className={cn(
             "relative overflow-hidden border-white/5 bg-secondary/10 hover:bg-secondary/20 transition-all group",
             type === "horizontal" && "w-full p-4 flex flex-col md:flex-row items-center gap-4",
-            type === "vertical" && "w-64 p-6 flex flex-col gap-4",
+            type === "vertical" && "w-full p-4 flex flex-col gap-3 min-w-0",
             type === "skyscraper" && "w-full h-full p-4 flex flex-col gap-6 justify-between border-primary/10 bg-primary/5",
             type === "box" && "aspect-square p-6 flex flex-col justify-center gap-4",
             className
