@@ -95,7 +95,7 @@ const HomeDashboard: React.FC = () => {
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
           <div className="xl:col-span-3 space-y-4">
             {/* CENTRAL TYPING AREA WITH SIDE ADS */}
-            <div className="animate-in fade-in zoom-in-95 duration-1000 delay-100 relative z-10 grid grid-cols-1 lg:grid-cols-[150px_1fr_150px] gap-4 items-stretch">
+            <div className="animate-in fade-in zoom-in-95 duration-1000 delay-100 relative grid grid-cols-1 lg:grid-cols-[130px_1fr_130px] gap-4 items-start">
               {/* Left Skyscraper Ad */}
               <div className="hidden lg:flex flex-col h-full min-h-[400px]">
                 <AdPlacement type="skyscraper" />
