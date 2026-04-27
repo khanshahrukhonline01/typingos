@@ -452,7 +452,7 @@ export const TypingTestBox: React.FC<TypingTestBoxProps> = ({ compact = false })
   return (
     <div
       ref={containerRef}
-      className="outline-none space-y-4"
+      className="outline-none space-y-4 relative overflow-clip"
       tabIndex={0}
       role="main"
       aria-label="Typing Test Area"
