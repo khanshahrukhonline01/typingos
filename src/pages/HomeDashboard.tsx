@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { TypingTestBox } from '@/components/typing/TypingTestBox';
 import {
-  DailyChallengesWidget,
-  InviteAndEarnWidget,
   PremiumBannerWidget,
-  DashboardLinksWidget,
-  MysteryCrateWidget
+  DashboardLinksWidget
 } from '@/components/shared/HomeWidgets';
-import { GalacticEventsWidget } from '@/components/dashboard/GalacticEventsWidget';
-import { RivalryWidget } from '@/components/dashboard/RivalryWidget';
+
 import { TypingConfigBar } from '@/components/typing/TypingConfigBar';
 import { AdPlacement } from '@/components/shared/AdPlacement';
 import { useTestHistoryContext } from '@/contexts/TestHistoryContext';
@@ -16,8 +12,8 @@ import { useUniversePulse } from '@/contexts/UniversePulseContext';
 import { useGamification } from '@/contexts/GamificationContext';
 
 import { motion } from 'framer-motion';
-import { Trophy, Zap, Star, Activity, Sparkles, TrendingUp, Target, BarChart3, Building, ChevronRight, Users } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Trophy, Zap, Star, Activity, Sparkles, TrendingUp, Target, BarChart3, ChevronRight, Users } from 'lucide-react';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -80,134 +76,71 @@ const HomeDashboard: React.FC = () => {
         </motion.div>
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-2 space-y-2">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-2 space-y-4">
         {/* TOP HEADER ADVERTISEMENT */}
         <div className="w-full animate-in fade-in slide-in-from-top-4 duration-1000">
           <AdPlacement type="horizontal" className="bg-primary/5 border-primary/10" />
         </div>
-
 
         {/* CONFIG BAR */}
         <div className="relative z-20">
           <TypingConfigBar />
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
-          <div className="xl:col-span-3 space-y-4">
-            {/* CENTRAL TYPING AREA WITH SIDE ADS */}
-            <div className="animate-in fade-in zoom-in-95 duration-1000 delay-100 relative grid grid-cols-1 lg:grid-cols-[130px_1fr_130px] gap-4 items-start">
-              {/* Left Skyscraper Ad */}
-              <div className="hidden lg:flex flex-col h-full min-h-[400px]">
-                <AdPlacement type="skyscraper" />
-              </div>
+        {/* CENTRAL TYPING AREA */}
+        <div className="animate-in fade-in zoom-in-95 duration-1000 delay-100">
+          <TypingTestBox />
+        </div>
 
-              {/* Central Typing Box */}
-              <div className="w-full h-full flex flex-col">
-                <TypingTestBox />
-              </div>
-
-              {/* Right Skyscraper Ad */}
-              <div className="hidden lg:flex flex-col h-full min-h-[400px]">
-                <AdPlacement
-                  type="skyscraper"
-                  mockData={{
-                    title: "Advanced Typing Pro",
-                    description: "Join 50k+ students in our elite keyboard masterclass.",
-                    cta: "Join Academy",
-                    color: "from-indigo-500/20 to-blue-500/20"
-                  }}
-                />
-              </div>
+        {/* CAREER INTELLIGENCE (AI Stats) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+          <Card className="bg-secondary/10 border-white/5 hover:border-primary/20 transition-all cursor-crosshair group overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <BarChart3 className="w-16 h-16 text-primary" />
             </div>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-[10px] font-black uppercase text-muted-foreground flex items-center gap-2">
+                <TrendingUp className="w-3 h-3 text-primary" />
+                {t('AI Predicted WPM')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-black italic">{averageWpm ? (averageWpm * 1.12).toFixed(1) : '---'}</div>
+              <p className="text-[9px] text-muted-foreground mt-1 uppercase font-bold text-green-500">{t('+12% Potency with AI Optmization')}</p>
+            </CardContent>
+          </Card>
 
-            {/* CAREER INTELLIGENCE (AI Stats) */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
-              <Card className="bg-secondary/10 border-white/5 hover:border-primary/20 transition-all cursor-crosshair group overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <BarChart3 className="w-16 h-16 text-primary" />
-                </div>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-[10px] font-black uppercase text-muted-foreground flex items-center gap-2">
-                    <TrendingUp className="w-3 h-3 text-primary" />
-                    {t('AI Predicted WPM')}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-black italic">{averageWpm ? (averageWpm * 1.12).toFixed(1) : '---'}</div>
-                  <p className="text-[9px] text-muted-foreground mt-1 uppercase font-bold text-green-500">{t('+12% Potency with AI Optmization')}</p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-secondary/10 border-white/5 hover:border-primary/20 transition-all cursor-crosshair group overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <Target className="w-16 h-16 text-primary" />
-                </div>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-[10px] font-black uppercase text-muted-foreground flex items-center gap-2">
-                    <Sparkles className="w-3 h-3 text-yellow-500" />
-                    {t('Qualification Probability')}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-black italic text-primary">92%</div>
-                  <Progress value={92} className="h-1 mt-2" />
-                </CardContent>
-              </Card>
-
-              <Card className="bg-secondary/10 border-white/5 hover:border-primary/20 transition-all cursor-crosshair group overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <Activity className="w-16 h-16 text-primary" />
-                </div>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-[10px] font-black uppercase text-muted-foreground flex items-center gap-2">
-                    <Zap className="w-3 h-3 text-blue-500" />
-                    {t('Peak Performance')}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-black italic">{topWpm || '---'} <span className="text-xs">WPM</span></div>
-                  <p className="text-[9px] text-muted-foreground mt-1 uppercase font-bold italic">{t('Top 4% Global Percentile')}</p>
-                </CardContent>
-              </Card>
+          <Card className="bg-secondary/10 border-white/5 hover:border-primary/20 transition-all cursor-crosshair group overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Target className="w-16 h-16 text-primary" />
             </div>
-          </div>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-[10px] font-black uppercase text-muted-foreground flex items-center gap-2">
+                <Sparkles className="w-3 h-3 text-yellow-500" />
+                {t('Qualification Probability')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-black italic text-primary">92%</div>
+              <Progress value={92} className="h-1 mt-2" />
+            </CardContent>
+          </Card>
 
-          {/* SIDEBAR WIDGETS */}
-          <div className="xl:col-span-1 space-y-6">
-            {/* Dedicated Sidebar Ad Slot */}
-            <AdPlacement type="vertical" className="w-full" />
-
-            <GalacticEventsWidget />
-
-            {/* RIVALRY WIDGET */}
-            <RivalryWidget />
-
-            {/* MYSTERY CRATE WIDGET */}
-            <MysteryCrateWidget />
-
-            <DailyChallengesWidget />
-
-            {/* SPONSORED CAREER PATH (Monetization 2.0) */}
-            <Card className="border-primary/20 bg-primary/5 overflow-hidden relative group cursor-pointer hover:bg-primary/10 transition-all">
-              <div className="absolute top-0 right-0 p-2">
-                <Badge variant="outline" className="text-[8px] opacity-30 border-0 uppercase font-black">Sponsored</Badge>
-              </div>
-              <CardContent className="p-5 flex gap-4 items-center">
-                <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform">
-                  <Building className="w-5 h-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="text-[10px] font-black uppercase tracking-tight">{t('Recruiting: Technical Expert')}</h4>
-                  <p className="text-[8px] text-muted-foreground uppercase font-bold">{t('Remote')} • 45k - 60k Coins</p>
-                  <div className="flex items-center gap-1 mt-1 text-[8px] font-black text-primary uppercase">
-                    {t('Apply with Skill Score')} <Activity className="w-2 h-2" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <InviteAndEarnWidget />
-          </div>
+          <Card className="bg-secondary/10 border-white/5 hover:border-primary/20 transition-all cursor-crosshair group overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Activity className="w-16 h-16 text-primary" />
+            </div>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-[10px] font-black uppercase text-muted-foreground flex items-center gap-2">
+                <Zap className="w-3 h-3 text-blue-500" />
+                {t('Peak Performance')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-black italic">{topWpm || '---'} <span className="text-xs">WPM</span></div>
+              <p className="text-[9px] text-muted-foreground mt-1 uppercase font-bold italic">{t('Top 4% Global Percentile')}</p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* QUICK ACCESS LINKS */}
