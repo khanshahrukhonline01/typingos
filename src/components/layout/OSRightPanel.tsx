@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NativeAdSlot } from "@/components/shared/NativeAdSlot";
+import { GalacticEventsWidget } from "@/components/dashboard/GalacticEventsWidget";
 import { cn } from "@/utils/utils";
 import { useTypingSession } from "@/contexts/TypingSessionContext";
 import { useGamification } from "@/contexts/GamificationContext";
@@ -182,6 +183,11 @@ export function OSRightPanel() {
                     </motion.div>
                   </CardContent>
                 </Card>
+              </motion.div>
+
+              {/* Galactic Events Widget */}
+              <motion.div variants={cardVariants}>
+                <GalacticEventsWidget />
               </motion.div>
 
               {/* Active Quests */}
